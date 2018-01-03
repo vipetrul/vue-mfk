@@ -2,6 +2,9 @@ import 'style-loader!css-loader!mocha-css'
 
 // create a div where mocha can add its stuff
 const mochaDiv = document.createElement('DIV')
+let style = document.createElement('style');
+style.textContent = '.application--wrap {min-height:auto}';
+mochaDiv.appendChild(style);
 mochaDiv.id = 'mocha'
 document.body.appendChild(mochaDiv)
 

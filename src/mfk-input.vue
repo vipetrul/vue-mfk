@@ -1,14 +1,13 @@
 <template>
-  <v-text-field
-              name="input-1"
-              label="Label Text"
-              id="testing"
-            ></v-text-field>
+      <v-text-field
+                name="mfk_fund"
+                label="Fund"
+                id="mfk_fund"
+                maxlength="3"
+              ></v-text-field>        
 </template>
 
 <script>
-import VTextField from 'vuetify/es5/components/VTextField'
-
 export default {};
 </script>
 
