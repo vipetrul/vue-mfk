@@ -3,119 +3,19 @@
       <v-layout row wrap >
         <v-flex xs12 d-flex>
           <v-text-field
-                    v-model="mfk_fund"
-                    name ="mfk_fund"
-                    label="Fund"
-                    maxlength="3"
-                    placeholder="000"
-                    mask="###"
-                    class="mfk-input"
-                    style="min-width:42px"
-                    @blur= "fillWithZeros"
-                    @input="onFullGoTo($event,3,'mfk_org')"
-                  ></v-text-field>
-          <v-text-field
-                    v-model="mfk_org"
-                    name="mfk_org"
-                    ref="mfk_org"
-                    label="Org"
-                    maxlength="2"
-                    placeholder="00"
-                    mask="##"
-                    class="mfk-input"
-                    style="min-width:30px"
-                    @blur= "fillWithZeros"
-                    @input="onFullGoTo($event,2,'mfk_dept')"
-                  ></v-text-field>
-          <v-text-field
-                    v-model="mfk_dept"
-                    name="mfk_dept"
-                    ref="mfk_dept"
-                    label="Dept"
-                    maxlength="4"
-                    placeholder="0000"
-                    mask="####"
-                    class="mfk-input"
-                    style="min-width:52px"
-                    @blur= "fillWithZeros"
-                    @input="onFullGoTo($event,4,'mfk_grant')"
-                  ></v-text-field>
-          <v-text-field
-                    v-model="mfk_grant"
-                    name="mfk_grant"
-                    ref="mfk_grant"
-                    label="Grant/Prgm"
-                    maxlength="8"
-                    placeholder="00000000"
-                    mask="########"
-                    class="mfk-input"
-                    style="min-width:92px"
-                    @blur= "fillWithZeros"
-                    @input="onFullGoTo($event,8,'mfk_iacct')"
-                  ></v-text-field>
-          <v-text-field
-                    v-model="mfk_iacct"
-                    name="mfk_iacct"
-                    ref="mfk_iacct"
-                    label="IAcct"
-                    maxlength="4"
-                    placeholder="0000"
-                    mask="####"
-                    class="mfk-input"
-                    style="min-width:52px"
-                    @blur= "fillWithZeros"
-                    @input="onFullGoTo($event,4,'mfk_oacct')"
-                  ></v-text-field>
-          <v-text-field
-                    v-model="mfk_oacct"
-                    name="mfk_oacct"
-                    ref="mfk_oacct"
-                    label="OAcct"
-                    maxlength="3"
-                    placeholder="000"
-                    mask="###"
-                    class="mfk-input"
-                    style="min-width:50px"
-                    @blur= "fillWithZeros"
-                    @input="onFullGoTo($event,3,'mfk_dacct')"
-                  ></v-text-field>
-          <v-text-field
-                    v-model="mfk_dacct"
-                    name="mfk_dacct"
-                    ref="mfk_dacct"
-                    label="DAcct"
-                    maxlength="5"
-                    placeholder="00000"
-                    mask="#####"
-                    class="mfk-input"
-                    style="min-width:52px"
-                    @blur= "fillWithZeros"
-                    @input="onFullGoTo($event,5,'mfk_fn')"
-                  ></v-text-field>
-          <v-text-field
-                    v-model="mfk_fn"
-                    name="mfk_fn"
-                    ref="mfk_fn"
-                    label="Fn"
-                    maxlength="2"
-                    placeholder="00"
-                    mask="##"
-                    class="mfk-input"
-                    style="min-width:30px"
-                    @blur= "fillWithZeros"
-                    @input="onFullGoTo($event,2,'mfk_cctr')"
-                  ></v-text-field>
-          <v-text-field
-                    v-model="mfk_cctr"
-                    name="mfk_cctr"
-                    ref="mfk_cctr"
-                    label="Cctr"
-                    maxlength="4"
-                    placeholder="0000"
-                    mask="####"
-                    class="mfk-input mfk-input-last"
-                    style="min-width:44px"
-                    @blur= "fillWithZeros"
+                    v-for="(el, index) in mfkElements"
+                    :key="el.index"
+                    v-model="el.value"
+                    :name="el.name"
+                    :ref="'mfk_field_' + el.index"
+                    :label="el.name"
+                    :maxlength="el.maxLength"
+                    :placeholder="'0'.repeat(el.maxLength)"
+                    :mask="'#'.repeat(el.maxLength)"
+                    :class="['mfk-input', index== mfkElements.length-1 ? 'mfk-input-last':'' ]"
+                    :style="{minWidth: el.minWidth + 'px'}"
+                    @input="onInput(el, $event)"
+                    @blur= "fillWithZeros(el, $event)"
                   ></v-text-field>
         </v-flex>
       </v-layout>     
@@ -124,33 +24,46 @@
 
 <script>
 export default {
-  data: function() { 
+  data: function() {
     return {
-      mfk_fund:"",
-      mfk_org:"",
-      mfk_dept:"",
-      mfk_grant:"",
-      mfk_iacct:"",
-      mfk_oacct:"",
-      mfk_dacct:"",
-      mfk_fn:"",
-      mfk_cctr:""
-      }
+      mfkElements: [
+        { index: 0, name: "Fund", maxLength: 3, minWidth: 42, value: "" },
+        { index: 1, name: "Org", maxLength: 2, minWidth: 30, value: "" },
+        { index: 2, name: "Dept", maxLength: 4, minWidth: 52, value: "" },
+        { index: 3, name: "Grant/Prgm", maxLength: 8, minWidth: 92, value: "" },
+        { index: 4, name: "IAcct", maxLength: 4, minWidth: 52, value: "" },
+        { index: 5, name: "OAcct", maxLength: 3, minWidth: 50, value: "" },
+        { index: 6, name: "DAcct", maxLength: 5, minWidth: 52, value: "" },
+        { index: 7, name: "Fn", maxLength: 2, minWidth: 30, value: "" },
+        { index: 8, name: "Cctr", maxLength: 4, minWidth: 44, value: "" }
+      ]
+    };
   },
 
   methods: {
-    onFullGoTo : function(value, maxLength, goto){
-      if(value.length == maxLength)
-        this.$refs[goto].focus();
+    onInput: function(el, $event) {
+      if (el.value.length == el.maxLength) this.FocusOnNextField(el.index);
     },
-    fillWithZeros : function($event){
-      let el = $event.target;
-      this[el.name] = el.value.padEnd(el.maxLength,"0");
+    FocusOnNextField: function(currentImputIndex) {
+      let nextField = "mfk_field_" + (currentImputIndex + 1);
+
+      if (nextField in this.$refs) {
+        this.$refs[nextField][0].disabled
+          ? FocusOnNextField(currentImputIndex + 1)
+          : this.$refs[nextField][0].focus();
+      }
+    },
+    fillWithZeros: function(el, $event) {
+      el.value = el.value.padEnd(el.maxLength, "0");
     }
   }
-}
+};
 </script>
 <style scoped>
-  .mfk-input {margin-right:0.3em}
-  .mfk-input-last {margin-right:0em}
+.mfk-input {
+  margin-right: 0.3em;
+}
+.mfk-input-last {
+  margin-right: 0em;
+}
 </style>
