@@ -5,7 +5,8 @@ import { createVM } from '../helpers/utils.js'
 describe('MfkInput.vue', function () {
   it('should render correct contents', function () {
     plugin(Vue);
-    const vm = createVM(this, `<v-app><mfk-input></mfk-input></v-app>`);
+    let data = {mfk:"123"};
+    const vm = createVM(this, `<v-app><mfk-input v-model='mfk'></mfk-input></v-app><br/><input v-model="mfk"/>`,{data:data});
 //vm.$el.querySelector('.hello h1').textContent.should.eql('Hello World!')
   })
 })

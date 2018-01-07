@@ -1,5 +1,4 @@
 <template>
-    <!-- <v-container grid-list-md> -->
       <v-layout row wrap >
         <v-flex xs12 d-flex>
           <v-text-field
@@ -14,19 +13,22 @@
                     :mask="'#'.repeat(el.maxLength)"
                     :class="['mfk-input', index== mfkElements.length-1 ? 'mfk-input-last':'' ]"
                     :style="{minWidth: el.minWidth + 'px'}"
-                    @input="onInput(el, $event)"
+                    @input="emitEvent()"
                     @blur= "fillWithZeros(el, $event)"
+                    @keyup="goToNextInput(el, $event)"
                   ></v-text-field>
         </v-flex>
       </v-layout>     
-    <!-- </v-container> -->
 </template>
 
 <script>
 export default {
-  data: function() {
+  props:{
+    value:String
+  },
+  data: function(){
     return {
-      mfkElements: [
+      mfkDefinition : [
         { index: 0, name: "Fund", maxLength: 3, minWidth: 42, value: "" },
         { index: 1, name: "Org", maxLength: 2, minWidth: 30, value: "" },
         { index: 2, name: "Dept", maxLength: 4, minWidth: 52, value: "" },
@@ -36,25 +38,43 @@ export default {
         { index: 6, name: "DAcct", maxLength: 5, minWidth: 52, value: "" },
         { index: 7, name: "Fn", maxLength: 2, minWidth: 30, value: "" },
         { index: 8, name: "Cctr", maxLength: 4, minWidth: 44, value: "" }
-      ]
-    };
+      ]}
   },
-
   methods: {
-    onInput: function(el, $event) {
+    emitEvent: function() {
+      this.$emit('input', this.mfkString);
+    },
+    goToNextInput: function(el, $event){
+      if(['Tab','Shift'].includes($event.key)) return; //these keys used for form navigation, so leave them alone
       if (el.value.length == el.maxLength) this.FocusOnNextField(el.index);
     },
     FocusOnNextField: function(currentImputIndex) {
       let nextField = "mfk_field_" + (currentImputIndex + 1);
 
       if (nextField in this.$refs) {
-        this.$refs[nextField][0].disabled
-          ? FocusOnNextField(currentImputIndex + 1)
-          : this.$refs[nextField][0].focus();
+        if ( this.$refs[nextField][0].disabled ) //skip field if it is disabled
+          { FocusOnNextField(currentImputIndex + 1) } //try focusing on next field
+          else
+          { 
+            this.$refs[nextField][0].focus(); 
+          }
       }
     },
     fillWithZeros: function(el, $event) {
-      el.value = el.value.padEnd(el.maxLength, "0");
+      if(el.value.length != el.maxLength){
+        el.value = el.value === undefined ? '' : el.value.padEnd(el.maxLength, "0");
+        this.emitEvent();
+      }
+    }
+  },
+  computed:{
+    mfkString : function(){
+      return this.mfkElements.map(a => a.value).join('-');
+    },
+    mfkElements : function(){
+      let mfkParts = this.value.split('-');
+      this.mfkDefinition.forEach(el => el.value = mfkParts[el.index] || '');
+      return this.mfkDefinition; 
     }
   }
 };
