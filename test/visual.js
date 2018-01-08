@@ -2,9 +2,19 @@ import 'style-loader!css-loader!mocha-css'
 
 // create a div where mocha can add its stuff
 const mochaDiv = document.createElement('DIV')
+
+//apply style to application wrap so it doesn't take much space
 let style = document.createElement('style');
 style.textContent = '.application--wrap {min-height:auto}';
 mochaDiv.appendChild(style);
+
+//add link to icons
+var icons=document.createElement("link")
+icons.setAttribute("rel", "stylesheet")
+icons.setAttribute("type", "text/css")
+icons.setAttribute("href", "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons")
+mochaDiv.appendChild(icons);
+
 mochaDiv.id = 'mocha'
 document.body.appendChild(mochaDiv)
 

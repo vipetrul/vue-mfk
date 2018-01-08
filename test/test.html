@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons"></link>
+    <link rel="stylesheet" type="text/css" href="../dist/vue-mfk.css"></link>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="../dist/vue-mfk.js"></script>
 
@@ -14,14 +16,21 @@
 <body>
     <v-app id="app">
         <div>
-            <mfk-input></mfk-input>
+            <v-flex>
+                <mfk-input v-model="mfk">
+                    <mfk-favorite slot="beforeMfk" v-model="mfk"></mfk-favorite>
+                </mfk-input>
+                <div>
+                    <input v-model="mfk" style="width:200px" />
+                </div>
+            </v-flex>
         </div>
     </v-app>
     <script>
         var app = new Vue({
             el: '#app',
             data: {
-                message: 'Hello Vue!'
+                mfk: "123-22"
             }
         })
     </script>

@@ -1,24 +1,25 @@
 <template>
-      <v-layout row wrap >
-        <v-flex xs12 d-flex>
-          <v-text-field
-                    v-for="(el, index) in mfkElements"
-                    :key="el.index"
-                    v-model="el.value"
-                    :name="el.name"
-                    :ref="'mfk_field_' + el.index"
-                    :label="el.name"
-                    :maxlength="el.maxLength"
-                    :placeholder="'0'.repeat(el.maxLength)"
-                    :mask="'#'.repeat(el.maxLength)"
-                    :class="['mfk-input', index== mfkElements.length-1 ? 'mfk-input-last':'' ]"
-                    :style="{minWidth: el.minWidth + 'px'}"
-                    @input="emitEvent()"
-                    @blur= "fillWithZeros(el, $event)"
-                    @keyup="goToNextInput(el, $event)"
-                  ></v-text-field>
-        </v-flex>
-      </v-layout>     
+    <v-flex d-flex>
+      <div class="beforeMfk"><slot name="beforeMfk"></slot></div>
+      <v-text-field
+                v-for="(el, index) in mfkElements"
+                :key="el.index"
+                v-model="el.value"
+                :name="el.name"
+                :ref="'mfk_field_' + el.index"
+                :label="el.name"
+                :maxlength="el.maxLength"
+                :placeholder="'0'.repeat(el.maxLength)"
+                :mask="'#'.repeat(el.maxLength)"
+                :class="['mfk-input', index== mfkElements.length-1 ? 'mfk-input-last':'' ]"
+                :style="{minWidth: el.minWidth + 'px'}"
+                @input="emitEvent()"
+                @blur= "fillWithZeros(el, $event)"
+                @keyup="goToNextInput(el, $event)"
+                :error="isMfkError"
+                :rules="[() => el.index == 0 ?'Username or Password is incorrect.':'']"
+              ></v-text-field>
+    </v-flex>
 </template>
 
 <script>
@@ -28,11 +29,12 @@ export default {
   },
   data: function(){
     return {
+      isMfkError : true,
       mfkDefinition : [
         { index: 0, name: "Fund", maxLength: 3, minWidth: 42, value: "" },
         { index: 1, name: "Org", maxLength: 2, minWidth: 30, value: "" },
         { index: 2, name: "Dept", maxLength: 4, minWidth: 52, value: "" },
-        { index: 3, name: "Grant/Prgm", maxLength: 8, minWidth: 92, value: "" },
+        { index: 3, name: "Grant/Prg", maxLength: 8, minWidth: 92, value: "" },
         { index: 4, name: "IAcct", maxLength: 4, minWidth: 52, value: "" },
         { index: 5, name: "OAcct", maxLength: 3, minWidth: 50, value: "" },
         { index: 6, name: "DAcct", maxLength: 5, minWidth: 52, value: "" },
@@ -72,7 +74,7 @@ export default {
       return this.mfkElements.map(a => a.value).join('-');
     },
     mfkElements : function(){
-      let mfkParts = this.value.split('-');
+      let mfkParts = (this.value||'').split('-');
       this.mfkDefinition.forEach(el => el.value = mfkParts[el.index] || '');
       return this.mfkDefinition; 
     }
@@ -80,10 +82,17 @@ export default {
 };
 </script>
 <style scoped>
-.mfk-input {
-  margin-right: 0.3em;
-}
+.mfk-input { margin-right: 0.3em; }
+
+.beforeMfk:empty {display: none}
+.beforeMfk { display: inline-block; padding-right: 0.3em; }
+
 .mfk-input-last {
   margin-right: 0em;
 }
+
+/* error message is displayed from fist field, so we need to make sure overflow is not hidden */
+.mfk-input >>> .input-group__details {
+  white-space: nowrap; overflow: visible;
+  }
 </style>
