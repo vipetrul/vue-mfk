@@ -1,6 +1,7 @@
 <template>
 
     <v-select
+              ref="favoriteMfkSelector"
               v-bind:items="_favoriteMfks"
               v-model="selectedMfk"
               label="Favorite MFKs"
@@ -26,6 +27,7 @@
 </template>
 
 <script>
+import _ from "lodash";
 
 export default {
   props: {
@@ -53,7 +55,9 @@ export default {
     },
     selectedMfk: {
       get: function() {
-        let favMfk = this.favoriteMfks.find(item => item.mfk == this.value); //find favorite mfk based on string MFK
+        console.log("getting");
+        let favMfk =_.find( this.favoriteMfks, item => item.mfk == this.value); //find favorite mfk based on string MFK
+        console.log(favMfk);
         return favMfk;
       },
       set: function(newValue) {
@@ -68,7 +72,10 @@ export default {
     onChange: function($event) {
       if($event.type == "addMfk")
         {
-           this.$emit("addFavoriteMfk", this.value); //instructing that currentn MFK should be added as favorite
+            this.$nextTick(function () {
+                this.$emit("addFavoriteMfk", this.value); //instructing that currentn MFK should be added as favorite
+            })
+           
         }
         else
         this.$emit("input", $event.mfk);
