@@ -16,10 +16,7 @@
                 </template>
                 <template slot="item" slot-scope="data">
                     <template v-if="data.item.type === 'addMfk'">
-                        Add to favorites
-                    </template>
-                    <template v-else-if="data.item.type === 'noMfks'">
-                        You have no favorite MFKs
+                        <v-flex>Add new mfk</v-flex>
                     </template>
                     <template v-else>
                         {{ data.item.alias }}
@@ -51,7 +48,7 @@ export default {
       return [
         { type: "addMfk" }, //instucts to add mfk
         { divider: true }, //insructs to add a divider
-        ...(this.favoriteMfks.length == 0 ? { type: "noMfks" } : this.favoriteMfks) //existing
+        ...(this.favoriteMfks.length == 0 ? [{ header: "You have no favorite MFKs" }] : this.favoriteMfks) //existing
       ];
     },
     selectedMfk: {
