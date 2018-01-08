@@ -16,7 +16,7 @@
                 </template>
                 <template slot="item" slot-scope="data">
                     <template v-if="data.item.type === 'addMfk'">
-                        <v-flex>Add new mfk</v-flex>
+                        Add this MFK to favorites
                     </template>
                     <template v-else>
                         {{ data.item.alias }}
@@ -66,7 +66,12 @@ export default {
   },
   methods: {
     onChange: function($event) {
-      this.$emit("input", $event.mfk);
+      if($event.type == "addMfk")
+        {
+           this.$emit("addFavoriteMfk", this.value); //instructing that currentn MFK should be added as favorite
+        }
+        else
+        this.$emit("input", $event.mfk);
     },
     favoriteClick: function($event) {
       console.log("clicked", $event);
