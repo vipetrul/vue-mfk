@@ -1,55 +1,92 @@
 <template>
+
     <v-select
-              v-bind:items="favoriteMfks"
+              v-bind:items="_favoriteMfks"
               v-model="selectedMfk"
               label="Favorite MFKs"
               item-text="key"
               item-value="value"
-              :prepend-icon="isFavoriteMfk ? 'star' : 'star_border'"
               placeholder="Select"
               class="favoriteMfks"
               dense
               @change="onChange"
-            ></v-select>
+            >
+                <template slot="selection" slot-scope="data">
+                    {{data.item.alias}}
+                </template>
+                <template slot="item" slot-scope="data">
+                    <template v-if="data.item.type === 'addMfk'">
+                        Add to favorites
+                    </template>
+                    <template v-else-if="data.item.type === 'noMfks'">
+                        You have no favorite MFKs
+                    </template>
+                    <template v-else>
+                        {{ data.item.alias }}
+                    </template>
+                </template>
+            </v-select>
 </template>
 
 <script>
+
 export default {
-props:{
-    value:String //mfk input
+  props: {
+    value: {
+      //mfk input
+      type: String,
+      required: true
+    },
+    favoriteMfks: {
+      type: Array,
+      required: true
+    }
   },
   data() {
     return {
-      _mfk: null,
-      favoriteMfks: [
-          {key:"Hello there" , value:"123-33"},
-          {key:"Empty MFK" , value:""},
-          {key:"Just Org" , value:"22"},
-      ]
     };
   },
-  computed:{
-      selectedMfk: {
-            get: function(){
-                let favMfk = this.favoriteMfks.find( item => item.value == this.value)
-                return favMfk ? favMfk.value : null;
-                },
-            set: function(newValue){
-                this._mfk = newValue;
-            }
-        },
-      isFavoriteMfk:function(){
-          return this.favoriteMfks.find( item => item.value == this.value)
+  computed: {
+    _favoriteMfks: function() {
+      return [
+        { type: "addMfk" }, //instucts to add mfk
+        { divider: true }, //insructs to add a divider
+        ...(this.favoriteMfks.length == 0 ? { type: "noMfks" } : this.favoriteMfks) //existing
+      ];
+    },
+    selectedMfk: {
+      get: function() {
+        let favMfk = this.favoriteMfks.find(item => item.mfk == this.value); //find favorite mfk based on string MFK
+        return favMfk;
       },
-  },
-  methods:{
-      onChange:function($event){
-          this.$emit('input', $event );
+      set: function(newValue) {
+        this._mfk = newValue.mfk;
       }
+    },
+    isFavoriteMfk: function() {
+      return this.favoriteMfks.find(item => item.value == this.value);
+    }
+  },
+  methods: {
+    onChange: function($event) {
+      this.$emit("input", $event.mfk);
+    },
+    favoriteClick: function($event) {
+      console.log("clicked", $event);
+    },
+    log:function(item){
+        console.log(item);
+    }
   }
 };
 </script>
 
 <style scoped>
-.favoriteMfks{width: 158px; white-space: nowrap}
+.favoriteMfks {
+  width: 158px;
+  white-space: nowrap;
+}
+.favBtn {
+  margin: 0;
+}
 </style>
