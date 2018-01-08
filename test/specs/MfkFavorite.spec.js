@@ -24,7 +24,7 @@ describe('MfkFavorite.vue', function () {
                 :favoriteMfks="favoriteMfks"
                 ></mfk-favorite>
           </mfk-input>
-          <div><input v-model="mfk" style="width:200px" /></div>
+          <div><input v-model="mfk" style="width:400px" /></div>
         </v-flex>
     </v-app>`, {data:data});
 //vm.$el.querySelector('.hello h1').textContent.should.eql('Hello World!')
