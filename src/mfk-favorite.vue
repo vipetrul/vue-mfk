@@ -2,8 +2,8 @@
 
     <v-select
               ref="favoriteMfkSelector"
-              v-bind:items="_favoriteMfks"
-              v-model="selectedMfk"
+              v-bind:items="favoriteMfks"
+              :value="selectedMfk"
               label="Favorite MFKs"
               item-text="key"
               item-value="value"
@@ -30,61 +30,65 @@
 import _ from "lodash";
 
 export default {
+  created: function(){
+      this.init();
+  },
   props: {
     value: {
       //mfk input
       type: String,
       required: true
     },
-    favoriteMfks: {
-      type: Array,
-      required: true
-    }
+    getFavoriteMfks: {
+      type: Function,
+      required: false
+    },
+    addFavoriteMfk: {
+      type: Function,
+      required: false
+    },
+    removeFavoriteMfk: {
+      type: Function,
+      required: false
+    },
   },
-  data() {
+  data: function() {
     return {
+        favoriteMfks:[]
     };
   },
   computed: {
-    _favoriteMfks: function() {
-      return [
-        { type: "addMfk" }, //instucts to add mfk
-        { divider: true }, //insructs to add a divider
-        ...(this.favoriteMfks.length == 0 ? [{ header: "You have no favorite MFKs" }] : this.favoriteMfks) //existing
-      ];
-    },
-    selectedMfk: {
-      get: function() {
-        console.log("getting");
-        let favMfk =_.find( this.favoriteMfks, item => item.mfk == this.value); //find favorite mfk based on string MFK
-        console.log(favMfk);
-        return favMfk;
-      },
-      set: function(newValue) {
-        this._mfk = newValue.mfk;
-      }
-    },
-    isFavoriteMfk: function() {
-      return this.favoriteMfks.find(item => item.value == this.value);
-    }
+      selectedMfk:{
+          get:function(){return  _.find( this.favoriteMfks, item => item.mfk == this.value)}
+          }
   },
   methods: {
+    init: function(){
+        Promise.resolve(this.getFavoriteMfks())
+        .then(
+            (mfks) => {
+            this.favoriteMfks = [
+                                    { type: "addMfk" }, //instucts to add mfk
+                                    { divider: true }, //insructs to add a divider
+                                    ...(mfks.length == 0 ? [{ header: "You have no favorite MFKs" }] : mfks) //add actual mfks
+                                ];
+            });
+    },
     onChange: function($event) {
       if($event.type == "addMfk")
         {
-            this.$nextTick(function () {
-                this.$emit("addFavoriteMfk", this.value); //instructing that currentn MFK should be added as favorite
-            })
-           
+            let alias = prompt("Please specify alias name for new Favorite MFK:")
+            if(!alias) {
+                alert("MFK alias is rquired."); 
+                this.init();
+                return;}
+            Promise.resolve(this.addFavoriteMfk({alias:alias, mfk:this.value})).then(()=> this.init());
         }
         else
         this.$emit("input", $event.mfk);
     },
     favoriteClick: function($event) {
       console.log("clicked", $event);
-    },
-    log:function(item){
-        console.log(item);
     }
   }
 };

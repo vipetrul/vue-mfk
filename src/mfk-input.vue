@@ -25,7 +25,7 @@
 <script>
 export default {
   props:{
-    value:String
+    value:String //mfk input
   },
   data: function(){
     return {
@@ -47,7 +47,7 @@ export default {
       this.$emit('input', this.mfkString);
     },
     goToNextInput: function(el, $event){
-      if(['Tab','Shift'].includes($event.key)) return; //these keys used for form navigation, so leave them alone
+      if(['Tab','Shift','ArrowLeft','ArrowRight'].includes($event.key)) return; //these keys used for form navigation, so leave them alone
       if (el.value.length == el.maxLength) this.FocusOnNextField(el.index);
     },
     FocusOnNextField: function(currentImputIndex) {
