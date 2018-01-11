@@ -32,15 +32,11 @@
     "prepublish": "yon run build"
   },
   "lint-staged": {
-    "*.{vue,jsx,js}": [
-      "eslint --fix"
-    ],
     "*.{vue,css}": [
       "stylefmt",
       "stylelint"
     ]
   },
-  "pre-commit": "lint:staged",
   "devDependencies": {
     "add-asset-html-webpack-plugin": "^2.0.0",
     "babel-core": "^6.24.0",
@@ -57,9 +53,6 @@
     "chai-dom": "^1.4.0",
     "cross-env": "^4.0.0",
     "css-loader": "^0.28.0",
-    "eslint": "^3.19.0",
-    "eslint-config-vue": "^2.0.0",
-    "eslint-plugin-vue": "^2.0.0",
     "extract-text-webpack-plugin": "^2.1.0",
     "html-webpack-plugin": "^2.28.0",
     "karma": "^1.7.0",
@@ -121,8 +114,5 @@
       "style-loader/addStyles.js"
     ]
   },
-  "license": {
-    "type": "MIT",
-    "url": "http://www.opensource.org/licenses/mit-license.php"
-  }
+  "license": "MIT"
 }
