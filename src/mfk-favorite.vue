@@ -1,12 +1,16 @@
 <template>
     <v-flex d-inline-flex>
-      <v-btn flat icon small top depressed color="indigo">
-        <v-icon>star</v-icon>
+      <v-btn flat icon small top depressed 
+          color="indigo" 
+          title="Add MFK to Favorites"
+          @click="addMfkToFavorites"
+          >
+        <v-icon>{{isFavoriteMfk?'star':'star_border'}}</v-icon>
       </v-btn>
       <v-select
               ref="favoriteMfkSelector"
-              v-bind:items="favoriteMfks"
-              :value="selectedMfk"
+              v-bind:items="optionsForFavoriteMfks"
+              :value="selectedFavoriteMfk"
               label="Favorite MFKs"
               item-text="key"
               item-value="value"
@@ -35,7 +39,7 @@ import _ from 'lodash'
 
 export default {
   created: function () {
-    this.init()
+    this.loadFavoriteMfks();
   },
   props: {
     value: {
@@ -62,39 +66,40 @@ export default {
     }
   },
   computed: {
-    selectedMfk: {
+    optionsForFavoriteMfks: function(){
+        if(this.favoriteMfks)
+          return this.favoriteMfks;
+        else
+          return [{ header: 'You have no favorite MFKs' }];
+    },
+    selectedFavoriteMfk:{
       get: function () {
         return _.find(this.favoriteMfks, item => item.mfk === this.value)
       }
+    },
+    isFavoriteMfk: function(){
+      return this.selectedFavoriteMfk;
     }
   },
   methods: {
-    init: function () {
-      Promise.resolve(this.getFavoriteMfks()).then(mfks => {
-        this.favoriteMfks = [
-          { type: 'addMfk' }, // instucts to add mfk
-          { divider: true }, // insructs to add a divider
-          ...(mfks.length == 0
-            ? [{ header: 'You have no favorite MFKs' }]
-            : mfks) // add actual mfks
-        ]
-      })
+    loadFavoriteMfks: function(){
+      Promise.resolve(this.getFavoriteMfks())
+        .then(data => this.favoriteMfks = data)
+        .catch(error => {
+                          alert("There was a problem with loading favorite MFKs."); 
+                          console.log("Favorite MFK loading problem:", error);
+                        });
     },
     onChange: function ($event) {
-      if ($event.type == 'addMfk') {
-        const alias = prompt('Please specify alias name for new Favorite MFK:')
-        if (!alias) {
-          alert('MFK alias is rquired.')
-          this.init()
-          return
-        }
-        Promise.resolve(
-          this.addFavoriteMfk({ alias: alias, mfk: this.value })
-        ).then(() => this.init())
-      } else this.$emit('input', $event.mfk)
+      if ($event.mfk ) {
+        this.$emit('input', $event.mfk); //tell parent that new MFK was selected
+      } 
     },
-    favoriteClick: function ($event) {
-      console.log('clicked', $event)
+    addMfkToFavorites: function () {
+      if(this.isFavoriteMfk){
+        alert("This MFK is already one of your favorites.")
+        return;
+      }
     }
   }
 }
