@@ -1,6 +1,5 @@
 <template>
-    <v-flex d-flex>
-      <div class="beforeMfk"><slot name="beforeMfk"></slot></div>
+    <v-flex>
       <v-text-field
                 v-for="(el, index) in mfkElements"
                 :key="el.index"

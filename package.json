@@ -80,8 +80,6 @@
     "stylelint": "^7.10.0",
     "stylelint-config-standard": "^16.0.0",
     "stylelint-processor-html": "^1.0.0",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1",
     "uppercamelcase": "^3.0.0",
     "vue": "^2.3.0",
     "vue-loader": "^12.0.0",

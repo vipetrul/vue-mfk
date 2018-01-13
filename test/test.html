@@ -6,26 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons"></link>
-    <link rel="stylesheet" type="text/css" href="../dist/vue-mfk.css"></link>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <link href="../dist/vue-mfk.css" rel="stylesheet"></link>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
     <script src="../dist/vue-mfk.js"></script>
 
 </head>
 
 <body>
-    <v-app id="app">
-        <div>
-            <v-flex>
-                <mfk-input v-model="mfk">
-                    <mfk-favorite slot="beforeMfk" v-model="mfk"></mfk-favorite>
-                </mfk-input>
-                <div>
-                    <input v-model="mfk" style="width:200px" />
-                </div>
-            </v-flex>
-        </div>
-    </v-app>
+    <div id="app">
+        <v-app>
+            <v-container>
+                <v-layout row>
+                    <mfk-input v-model='mfk'></mfk-input>
+                </v-layout>
+            </v-container>
+        </v-app>
+    </div>
     <script>
         var app = new Vue({
             el: '#app',

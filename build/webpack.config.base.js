@@ -27,6 +27,10 @@ module.exports = {
     path: resolve(__dirname, '../dist'),
     filename: `${filename}.common.js`
   },
+  externals:{
+    vuetify:'Vuetify',
+    lodash:'lodash'
+  },
   entry: './src/index.js',
   resolve: {
     extensions: ['.js', '.vue', '.jsx', 'css'],
@@ -55,7 +59,7 @@ module.exports = {
       },
       {
         test: /\.styl$/,
-        loader: ['style-loader', 'css-loader', 'stylus-loader']
+        loader: ['style-loader', 'css-loader']
       }
     ]
   },
