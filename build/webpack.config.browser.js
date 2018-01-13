@@ -14,6 +14,10 @@ module.exports = merge(base, {
     library: moduleName,
     libraryTarget: 'umd'
   },
+  externals:{
+    vuetify:'Vuetify',
+    lodash:'lodash'
+  },
   module: {
     rules: [
       {

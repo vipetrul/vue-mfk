@@ -1,5 +1,5 @@
 <template>
-    <v-flex>
+    <v-layout row class="mfk-input-wrapper">
       <v-text-field
                 v-for="(el, index) in mfkElements"
                 :key="el.index"
@@ -18,7 +18,7 @@
                 :error="isMfkError"
                 :rules="[() => el.index == 0 ?'Username or Password is incorrect.':'']"
               ></v-text-field>
-    </v-flex>
+    </v-layout>
 </template>
 
 <script>
