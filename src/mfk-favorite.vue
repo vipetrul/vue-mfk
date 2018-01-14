@@ -1,9 +1,10 @@
 <template>
-    <v-flex d-inline-flex>
+    <v-flex d-flex class="favorite-mfk-wrapper">
       <v-btn flat icon small top depressed 
           color="indigo" 
           title="Add MFK to Favorites"
           @click="addMfkToFavorites"
+          class="favorite-mfk-btn"
           >
         <v-icon>{{isFavoriteMfk?'star':'star_border'}}</v-icon>
       </v-btn>
@@ -106,11 +107,17 @@ export default {
 </script>
 
 <style scoped>
+.favorite-mfk-wrapper {
+  max-width: 180px;
+  width: 180px;
+  margin-right: 0.3em;
+  }
 .favoriteMfks {
-  width: 158px;
   white-space: nowrap;
 }
 .favBtn {
   margin: 0;
 }
+
+.favorite-mfk-btn{flex: 0 0 auto}
 </style>

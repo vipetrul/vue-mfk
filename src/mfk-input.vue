@@ -11,12 +11,12 @@
                 :placeholder="'0'.repeat(el.maxLength)"
                 :mask="'#'.repeat(el.maxLength)"
                 :class="['mfk-input', index== mfkElements.length-1 ? 'mfk-input-last':'' ]"
-                :style="{minWidth: el.minWidth + 'px'}"
+                :style="{minWidth: el.minWidth + 'px', width:el.minWidth + 'px'}"
                 @input="emitEvent()"
                 @blur= "fillWithZeros(el, $event)"
                 @keyup="goToNextInput(el, $event)"
                 :error="isMfkError"
-                :rules="[() => el.index == 0 ?'Username or Password is incorrect.':'']"
+                :rules="[() => el.index == 0 ?'Username or Password is wrong.':'']"
               ></v-text-field>
     </v-layout>
 </template>
@@ -33,7 +33,7 @@ export default {
         { index: 0, name: "Fund", maxLength: 3, minWidth: 42, value: "" },
         { index: 1, name: "Org", maxLength: 2, minWidth: 30, value: "" },
         { index: 2, name: "Dept", maxLength: 4, minWidth: 52, value: "" },
-        { index: 3, name: "Grant/Prg", maxLength: 8, minWidth: 92, value: "" },
+        { index: 3, name: "Grant/Prg", maxLength: 8, minWidth: 78, value: "" },
         { index: 4, name: "IAcct", maxLength: 4, minWidth: 52, value: "" },
         { index: 5, name: "OAcct", maxLength: 3, minWidth: 50, value: "" },
         { index: 6, name: "DAcct", maxLength: 5, minWidth: 52, value: "" },
@@ -81,7 +81,7 @@ export default {
 };
 </script>
 <style scoped>
-.mfk-input { margin-right: 0.3em; }
+.mfk-input { margin-right: 0.3em; flex-basis: auto }
 
 .beforeMfk:empty {display: none}
 .beforeMfk { display: inline-block; padding-right: 0.3em; }

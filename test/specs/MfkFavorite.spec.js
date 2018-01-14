@@ -18,30 +18,22 @@ describe('MfkFavorite.vue', function () {
         addMfk: function(newMfk){return new Promise((resolve,reject)=> window.setTimeout(()=>{mfkStore.push(newMfk); resolve()},100))},
         getMfks: function(newMfk){return new Promise((resolve,reject)=> window.setTimeout(()=>resolve(mfkStore),100))},
         removeMfk:function(removedMfk){return new Promise((resolve,reject)=> window.setTimeout(()=> { _.reject(mfkStore,(mfk)=> mfk == removedMfk); resolve()},100))},
-      },
-      methods:{
-        addFavoriteMfk:function(newMfk){
-          this.favoriteMfks.push({alias: "new mfk", mfk: newMfk});
-          console.log("new collection", this.favoriteMfks);
-        }
       }
-
     };
     const vm = createVM(this, `
     <v-app style="position:relative">
-        <v-flex>
-          <mfk-input v-model="mfk">
-            <mfk-favorite 
-                slot="beforeMfk" 
+      <v-layout>  
+        <v-flex d-flex>
+          <mfk-favorite 
                 v-model="mfk" 
                 :getFavoriteMfks="getMfks"
                 :addFavoriteMfk="addMfk"
                 :removeFavoriteMfk="removeMfk"
-                @addFavoriteMfk="addFavoriteMfk"
                 ></mfk-favorite>
-          </mfk-input>
-          <div><input v-model="mfk" style="width:400px" /></div>
+            <mfk-input v-model="mfk"></mfk-input>
         </v-flex>
+      </v-layout>
+      <div><input v-model="mfk" style="width:400px" /></div>
     </v-app>`, options);
     //vm.$el.querySelector('.hello h1').textContent.should.eql('Hello World!')
   })
