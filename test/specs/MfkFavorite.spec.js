@@ -3,8 +3,8 @@ import plugin from '../../src/index'
 import { createVM } from '../helpers/utils.js'
 import _ from 'lodash'
 
-describe('MfkFavorite.vue', function () {
-  it('should render correct contents', function () {
+describe('MfkFavorite.vue - with explicit prop functions', function () {
+  it('should use explicit functions when provided', function () {
     plugin(Vue);
     let mfkStore = [
       { alias: "Whole thing", mfk: "111-22-3333-44444444-5555-666-77777-88-9999" },

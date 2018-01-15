@@ -3,9 +3,12 @@ import Vuetify from 'vuetify'
 import MfkInput from './mfk-input.vue'
 import MfkFavotire from './mfk-favorite.vue'
 
+import Defaults from './defaults' //default settings
 
-function plugin(Vue) {
+function plugin(Vue, options) {
   
+  Object.assign(Defaults, options); //merge properties with defaults
+
   //Use folling components from vuetify
   Vue.use(Vuetify)
   

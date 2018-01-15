@@ -37,6 +37,7 @@
 
 <script>
 import _ from 'lodash'
+import defaults from './defaults'
 
 export default {
   created: function () {
@@ -50,15 +51,18 @@ export default {
     },
     getFavoriteMfks: {
       type: Function,
-      required: false
+      required: false,
+      default: () => defaults.getFavoriteMfks(),
     },
     addFavoriteMfk: {
       type: Function,
-      required: false
+      required: false,
+      default: () => defaults.addFavoriteMfk()
     },
     removeFavoriteMfk: {
       type: Function,
-      required: false
+      required: false,
+      default: () => defaults.removeFavoriteMfk()
     }
   },
   data: function () {
