@@ -16,12 +16,12 @@ describe('MfkFavorite.vue', function () {
       data: {
         mfk: "123-45",
         addMfk: function(newMfk){return new Promise((resolve,reject)=> window.setTimeout(()=>{mfkStore.push(newMfk); resolve()},100))},
-        getMfks: function(newMfk){return new Promise((resolve,reject)=> window.setTimeout(()=>resolve(mfkStore),100))},
+        getMfks: function(){return new Promise((resolve,reject)=> window.setTimeout(()=>resolve(mfkStore),100))},
         removeMfk:function(removedMfk){return new Promise((resolve,reject)=> window.setTimeout(()=> { _.reject(mfkStore,(mfk)=> mfk == removedMfk); resolve()},100))},
       }
     };
     const vm = createVM(this, `
-    <v-app style="position:relative">
+    <v-app>
       <v-layout>  
         <v-flex d-flex>
           <mfk-favorite 

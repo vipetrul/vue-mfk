@@ -11,6 +11,7 @@
     <link href="../dist/vue-mfk.css" rel="stylesheet"></link>
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
     <script src="../dist/vue-mfk.js"></script>
 
 </head>
@@ -18,9 +19,14 @@
 <body>
     <div id="app">
         <v-app>
-            <v-container>
-                <v-layout row>
-                    <v-flex xs12>
+            <v-container fluid>
+                <v-layout>
+                    <v-flex xs8 d-flex>
+                        <mfk-favorite 
+                            v-model="mfk" 
+                            :get-favorite-mfks="getMfks" 
+                            :add-favorite-mfk="addMfk" 
+                            :remove-favorite-mfk="removeMfk"></mfk-favorite>
                         <mfk-input v-model='mfk'></mfk-input>
                     </v-flex>
                 </v-layout>
@@ -28,12 +34,22 @@
         </v-app>
     </div>
     <script>
+        let mfkStore = [
+            { alias: "Whole thing", mfk: "111-22-3333-44444444-5555-666-77777-88-9999" },
+            { alias: "Just Ones", mfk: "111-11-1111-11111111-5555-666-77777-88-9999" },
+            { alias: "No Org", mfk: "444--6666-11111111-5555-666-77777-88-9999" },
+        ];
+
         var app = new Vue({
             el: '#app',
             data: {
-                mfk: "123-22"
+                mfk: "123-22",
+                addMfk: function (newMfk) { return new Promise((resolve, reject) => window.setTimeout(() => { mfkStore.push(newMfk); resolve() }, 100)) },
+                getMfks: function () { return new Promise((resolve, reject) => window.setTimeout(() => resolve(mfkStore), 100)) },
+                removeMfk: function (removedMfk) { return new Promise((resolve, reject) => window.setTimeout(() => { _.reject(mfkStore, (mfk) => mfk == removedMfk); resolve() }, 100)) },
             }
-        })
+        });
+
     </script>
 
 </body>

@@ -16,7 +16,7 @@ module.exports = merge(base, {
   },
   externals:{
     vuetify:'Vuetify',
-    lodash:'lodash'
+    lodash:'_'
   },
   module: {
     rules: [
