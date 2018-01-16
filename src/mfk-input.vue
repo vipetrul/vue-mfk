@@ -12,23 +12,26 @@
                 :mask="'#'.repeat(el.maxLength)"
                 :class="['mfk-input', index== mfkElements.length-1 ? 'mfk-input-last':'' ]"
                 :style="{minWidth: el.minWidth + 'px', width:el.minWidth + 'px'}"
-                @input="emitEvent()"
+                @input="onInput"
                 @blur= "fillWithZeros(el, $event)"
                 @keyup="goToNextInput(el, $event)"
                 :error="isMfkError"
-                :rules="[() => el.index == 0 ?'Username or Password is wrong.':'']"
+                :rules="[() => el.index == 0 ? 'somethng else?' :'']"
               ></v-text-field>
     </v-layout>
 </template>
 
 <script>
+import validateMfkFunc from './Services/validateMfk';
+import _ from 'lodash';
+
 export default {
   props:{
     value:String //mfk input
   },
   data: function(){
     return {
-      isMfkError : true,
+      mfkError : '',
       mfkDefinition : [
         { index: 0, name: "Fund", maxLength: 3, minWidth: 42, value: "" },
         { index: 1, name: "Org", maxLength: 2, minWidth: 30, value: "" },
@@ -41,10 +44,31 @@ export default {
         { index: 8, name: "Cctr", maxLength: 4, minWidth: 44, value: "" }
       ]}
   },
+  computed:{
+    isMfkError : function(){
+      return this.mfkError ? true : false;
+    },
+    mfkString : function(){
+      return this.mfkElements.map(a => a.value).join('-');
+    },
+    mfkElements : function(){
+      let mfkParts = (this.value||'').split('-');
+      this.mfkDefinition.forEach(el => el.value = mfkParts[el.index] || '');
+      return this.mfkDefinition; 
+    }
+  },
   methods: {
-    emitEvent: function() {
+    onInput: function() {
+      this.emitEvent();
+      console.log("Calling Validate MFK");
+      this.validateMfk();
+    },
+    emitEvent:function(){
       this.$emit('input', this.mfkString);
     },
+    validateMfk: _.debounce(function(){
+      validateMfkFunc(this.mfkString).catch(error => this.mfkError = error);
+      },500),
     goToNextInput: function(el, $event){
       if(['Tab','Shift','ArrowLeft','ArrowRight'].includes($event.key)) return; //these keys used for form navigation, so leave them alone
       if (el.value.length == el.maxLength) this.FocusOnNextField(el.index);
@@ -67,17 +91,8 @@ export default {
         this.emitEvent();
       }
     }
-  },
-  computed:{
-    mfkString : function(){
-      return this.mfkElements.map(a => a.value).join('-');
-    },
-    mfkElements : function(){
-      let mfkParts = (this.value||'').split('-');
-      this.mfkDefinition.forEach(el => el.value = mfkParts[el.index] || '');
-      return this.mfkDefinition; 
-    }
   }
+
 };
 </script>
 <style scoped>
