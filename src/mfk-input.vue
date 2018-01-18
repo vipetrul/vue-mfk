@@ -16,7 +16,7 @@
                 @blur= "fillWithZeros(el, $event)"
                 @keyup="goToNextInput(el, $event)"
                 :error="isMfkError"
-                :rules="[() => el.index == 0 ? 'somethng else?' :'']"
+                :error-messages="el.index == 0 && isMfkError ? [mfkError] : []"
               ></v-text-field>
     </v-layout>
 </template>
@@ -67,7 +67,9 @@ export default {
       this.$emit('input', this.mfkString);
     },
     validateMfk: _.debounce(function(){
-      validateMfkFunc(this.mfkString).catch(error => this.mfkError = error);
+      validateMfkFunc(this.mfkString)
+        .then(() => this.mfkError = null)
+        .catch(error => this.mfkError = error);
       },500),
     goToNextInput: function(el, $event){
       if(['Tab','Shift','ArrowLeft','ArrowRight'].includes($event.key)) return; //these keys used for form navigation, so leave them alone

@@ -34,6 +34,7 @@ window.mocha.setup({
   timeout: 5000,
   globals: [
     '__VUE_DEVTOOLS_INSTANCE_MAP__',
+    '__VUE_DEVTOOLS_INSPECT__',
     '__VUE_DEVTOOLS_TOAST__',
     'script',
     'inject',
