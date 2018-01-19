@@ -6,9 +6,9 @@ import _ from 'lodash'
 describe('MfkFavorite.vue - with default functions', function () {
   it('Should use dafault options when provided', function () {
     let mfkStore = [
-      { alias: "Default 1", mfk: "111-22-3333-44444444-5555-666-77777-88-9999" },
-      { alias: "Default 2", mfk: "222-11-1111-11111111-5555-666-77777-88-9999" },
-      { alias: "Default 3", mfk: "333-01-6666-11111111-5555-666-77777-88-9999" },
+      { alias: "Default 1", mfk: "111-22-3333-12345-44444444-5555-666-77777-88-9999" },
+      { alias: "Default 2", mfk: "222-11-1111-12345-11111111-5555-666-77777-88-9999" },
+      { alias: "Default 3", mfk: "333-01-6666-12345-11111111-5555-666-77777-88-9999" },
     ];
 
     var defaults = {
@@ -16,7 +16,7 @@ describe('MfkFavorite.vue - with default functions', function () {
       getFavoriteMfks: function(){return new Promise((resolve,reject)=> window.setTimeout(()=>resolve(mfkStore),100))},
       removeFavoriteMfk: function(removedMfk){return new Promise((resolve,reject)=> window.setTimeout(()=> { _.reject(mfkStore,(mfk)=> mfk == removedMfk); resolve()},100))},
     }
-    
+
     plugin(Vue, defaults);
 
     let options = {

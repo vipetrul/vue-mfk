@@ -7,9 +7,9 @@ describe('MfkFavorite.vue - with explicit prop functions', function () {
   it('should use explicit functions when provided', function () {
     plugin(Vue);
     let mfkStore = [
-      { alias: "Whole thing", mfk: "111-22-3333-44444444-5555-666-77777-88-9999" },
-      { alias: "Just Ones", mfk: "111-11-1111-11111111-5555-666-77777-88-9999" },
-      { alias: "No Org", mfk: "444--6666-11111111-5555-666-77777-88-9999" },
+      { alias: "Whole thing", mfk: "111-22-3333-12345-44444444-5555-666-77777-88-9999" },
+      { alias: "Just Ones", mfk: "111-11-1111-12345-11111111-5555-666-77777-88-9999" },
+      { alias: "No Org", mfk: "444--6666-12345-11111111-5555-666-77777-88-9999" },
     ];
 
     let options = {

@@ -33,15 +33,16 @@ export default {
     return {
       mfkError : '',
       mfkDefinition : [
-        { index: 0, name: "Fund", maxLength: 3, minWidth: 42, value: "" },
-        { index: 1, name: "Org", maxLength: 2, minWidth: 30, value: "" },
-        { index: 2, name: "Dept", maxLength: 4, minWidth: 52, value: "" },
-        { index: 3, name: "Grant/Prg", maxLength: 8, minWidth: 78, value: "" },
-        { index: 4, name: "IAcct", maxLength: 4, minWidth: 52, value: "" },
-        { index: 5, name: "OAcct", maxLength: 3, minWidth: 50, value: "" },
-        { index: 6, name: "DAcct", maxLength: 5, minWidth: 52, value: "" },
-        { index: 7, name: "Fn", maxLength: 2, minWidth: 30, value: "" },
-        { index: 8, name: "Cctr", maxLength: 4, minWidth: 44, value: "" }
+        { index: 0, name: "Fund", maxLength: 3, minWidth: 36, value: "" },
+        { index: 1, name: "Org", maxLength: 2, minWidth: 26, value: "" },
+        { index: 2, name: "Dept", maxLength: 4, minWidth: 42, value: "" },
+        { index: 3, name: "SubDept", maxLength: 5, minWidth: 54, value: "" },
+        { index: 4, name: "Grant/Prg", maxLength: 8, minWidth: 78, value: "" },
+        { index: 5, name: "IAcct", maxLength: 4, minWidth: 42, value: "" },
+        { index: 6, name: "OAcct", maxLength: 3, minWidth: 38, value: "" },
+        { index: 7, name: "DAcct", maxLength: 5, minWidth: 50, value: "" },
+        { index: 8, name: "Fn", maxLength: 2, minWidth: 26, value: "" },
+        { index: 9, name: "Cctr", maxLength: 4, minWidth: 38, value: "" }
       ]}
   },
   computed:{
@@ -98,17 +99,19 @@ export default {
 };
 </script>
 <style scoped>
-.mfk-input { margin-right: 0.3em; flex-basis: auto }
+.mfk-input { padding-right: 0.3em; flex-basis: auto }
 
 .beforeMfk:empty {display: none}
 .beforeMfk { display: inline-block; padding-right: 0.3em; }
 
 .mfk-input-last {
-  margin-right: 0em;
+  padding-right: 0em;
 }
 
 /* error message is displayed from fist field, so we need to make sure overflow is not hidden */
 .mfk-input >>> .input-group__details {
   white-space: nowrap; overflow: visible;
   }
+
+.mfk-input >>> label {min-width: 120%;}
 </style>
