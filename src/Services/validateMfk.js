@@ -1,9 +1,12 @@
 function httpGetAsync(theUrl, callback)
 {
+    //https://apps.its.uiowa.edu/mfk/external-developer.html
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             callback(xmlHttp.responseText);
+        else if (xmlHttp.readyState == 4)
+            callback(`0\nUnable to reach MFK validation service`); //simulate bad response
     }
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
@@ -41,7 +44,11 @@ export default function ValidateMfk(mfk){
     return new Promise((resolve, reject) => {
         httpGetAsync(url, (result)=> {
             console.log("Validation result:", result);
-            resolve();
+            let parts = result.split(/\n/); //split by new line
+            if (parts[0] == 1)
+                resolve();
+            else
+                reject(parts[1]);
         } );
     });
     
