@@ -9,6 +9,7 @@ describe('MfkFavorite.vue - with default functions', function () {
       { alias: "Default 1", mfk: "111-22-3333-12345-44444444-5555-666-77777-88-9999" },
       { alias: "Default 2", mfk: "222-11-1111-12345-11111111-5555-666-77777-88-9999" },
       { alias: "Default 3", mfk: "333-01-6666-12345-11111111-5555-666-77777-88-9999" },
+      { alias: "Valid MFK", mfk: "260-43-5064-40100-00000000-6026-520-20100-00-0000" },
     ];
 
     var defaults = {

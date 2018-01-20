@@ -26,7 +26,6 @@ let mfkDefinition = [
 ]
 
 export default function ValidateMfk(mfk){
-    console.log('Actually validating');
     let mfkParts = (mfk || '').split('-');
     
     if(mfkParts.length > mfkDefinition.length)
@@ -38,12 +37,9 @@ export default function ValidateMfk(mfk){
     }
 
     let mfkWithoutDashes = mfk.replace(/-/g,"");
-    console.log("stripped",mfkWithoutDashes);
     let url = `https://apps.its.uiowa.edu/mfk/api-singleDesc.jsp?mfk=10%20%20%20${mfkWithoutDashes}`;
-    console.log("Calling url:", url);
     return new Promise((resolve, reject) => {
         httpGetAsync(url, (result)=> {
-            console.log("Validation result:", result);
             let parts = result.split(/\n/); //split by new line
             if (parts[0] == 1)
                 resolve();

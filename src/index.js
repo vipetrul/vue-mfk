@@ -4,6 +4,7 @@ import MfkInput from './mfk-input.vue'
 import MfkFavotire from './mfk-favorite.vue'
 
 import Defaults from './defaults' //default settings
+import ValidateMfk from './Services/validateMfk'
 
 function plugin(Vue, options) {
   
@@ -27,5 +28,6 @@ const version = '__VERSION__'
 export {
   MfkInput,
   MfkFavotire,
+  ValidateMfk,
   version
 }

@@ -27,7 +27,11 @@ import _ from 'lodash';
 
 export default {
   props:{
-    value:String //mfk input
+    value:String, //mfk input
+    isValidationEnabled:{
+      type:Boolean,
+      default:true
+    }
   },
   data: function(){
     return {
@@ -61,8 +65,6 @@ export default {
   methods: {
     onInput: function() {
       this.emitEvent();
-      console.log("Calling Validate MFK");
-      this.validateMfk();
     },
     emitEvent:function(){
       this.$emit('input', this.mfkString);
@@ -92,6 +94,14 @@ export default {
       if(el.value.length != el.maxLength){
         el.value = el.value === undefined ? '' : el.value.padEnd(el.maxLength, "0");
         this.emitEvent();
+      }
+    }
+  },
+  watch:{
+    value:function(oldValue, newValue){
+      if(this.isValidationEnabled)
+      {
+        this.validateMfk();
       }
     }
   }
