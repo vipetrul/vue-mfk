@@ -13,8 +13,6 @@
               v-bind:items="optionsForFavoriteMfks"
               :value="selectedFavoriteMfk"
               label="Favorite MFKs"
-              item-text="key"
-              item-value="value"
               placeholder="Select"
               class="favoriteMfks"
               dense
@@ -24,12 +22,7 @@
                     {{data.item.alias}}
                 </template>
                 <template slot="item" slot-scope="data">
-                    <template v-if="data.item.type === 'addMfk'">
-                        Add this MFK to favorites
-                    </template>
-                    <template v-else>
-                        {{ data.item.alias }}
-                    </template>
+                    {{ data.item.alias }} 
                 </template>
             </v-select>
       </v-flex>
@@ -73,7 +66,7 @@ export default {
   computed: {
     optionsForFavoriteMfks: function(){
         if(this.favoriteMfks)
-          return this.favoriteMfks;
+          return _.sortBy(this.favoriteMfks, [(item)=> item.alias.toLowerCase() ]);
         else
           return [{ header: 'You have no favorite MFKs' }];
     },
@@ -105,6 +98,18 @@ export default {
         alert("This MFK is already one of your favorites.")
         return;
       }
+
+      let newAlias = prompt("Please specify alias name for new favorite MFK.")
+
+      if (!newAlias)
+        return;
+
+      let newFave = {mfk: this.value, alias: newAlias};
+
+      this.favoriteMfks.push(newFave); //temporarily add new fave mfk, so that interface displays is right away
+      Promise.resolve(this.addFavoriteMfk(newFave))
+        .catch((error)=> alert(`There was a problem while saving new favoreite MFK.\n${error}`))
+        .finally(()=> this.loadFavoriteMfks());;
     }
   }
 }
