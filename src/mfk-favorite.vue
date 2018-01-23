@@ -135,16 +135,15 @@ export default {
 
 <style scoped>
 .favorite-mfk-wrapper {
-  max-width: 180px;
-  width: 180px;
+  max-width: 170px;
+  width: 170px;
   margin-right: 0.3em;
   }
-.favoriteMfks {
-  white-space: nowrap;
-}
-.favBtn {
-  margin: 0;
-}
+
+.favoriteMfks { white-space: nowrap; }
+.favoriteMfks >>> label {min-width: 120%;}
+.favBtn { margin: 0; }
 
 .favorite-mfk-btn{flex: 0 0 auto}
+
 </style>
