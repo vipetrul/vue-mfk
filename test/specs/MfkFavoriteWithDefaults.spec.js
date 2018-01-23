@@ -13,9 +13,9 @@ describe('MfkFavorite.vue - with default functions', function () {
     ];
 
     var defaults = {
-      addFavoriteMfk: function(newMfk){return new Promise((resolve,reject)=> window.setTimeout(()=>{console.log('new', newMfk);mfkStore.push(newMfk); resolve()},100))},
-      getFavoriteMfks: function(){return new Promise((resolve,reject)=> window.setTimeout(()=>{console.log('get', mfkStore); resolve(mfkStore)},100))},
-      removeFavoriteMfk: function(removedMfk){ console.log('a2', removedMfk);return new Promise((resolve,reject)=> window.setTimeout(()=> { mfkStore = _.reject(mfkStore,(mfk) => mfk.alias == removedMfk.alias && mfk.mfk == removedMfk.mfk); resolve()},100))},
+      addFavoriteMfk: function(newMfk){return new Promise((resolve,reject)=> window.setTimeout(()=>{mfkStore.push(newMfk); resolve()},100))},
+      getFavoriteMfks: function(){return new Promise((resolve,reject)=> window.setTimeout(()=>{resolve(mfkStore)},100))},
+      removeFavoriteMfk: function(removedMfk){ return new Promise((resolve,reject)=> window.setTimeout(()=> { mfkStore = _.reject(mfkStore,(mfk) => mfk.alias == removedMfk.alias && mfk.mfk == removedMfk.mfk); resolve()},100))},
     }
 
     plugin(Vue, defaults);
