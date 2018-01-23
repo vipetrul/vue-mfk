@@ -65,7 +65,7 @@ export default {
   },
   computed: {
     optionsForFavoriteMfks: function(){
-        if(this.favoriteMfks)
+        if(this.favoriteMfks.length > 0)
           return _.sortBy(this.favoriteMfks, [(item)=> item.alias.toLowerCase() ]);
         else
           return [{ header: 'You have no favorite MFKs' }];
