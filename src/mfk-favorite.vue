@@ -2,8 +2,8 @@
     <v-flex d-flex class="favorite-mfk-wrapper">
       <v-btn flat icon small top depressed 
           color="indigo" 
-          title="Add MFK to Favorites"
-          @click="addMfkToFavorites"
+          :title="buttonTitle"
+          @click="toggleFavoriteMfk"
           class="favorite-mfk-btn"
           >
         <v-icon>{{isFavoriteMfk?'star':'star_border'}}</v-icon>
@@ -45,17 +45,17 @@ export default {
     getFavoriteMfks: {
       type: Function,
       required: false,
-      default: () => defaults.getFavoriteMfks(),
+      default: () => defaults.getFavoriteMfks()
     },
     addFavoriteMfk: {
       type: Function,
       required: false,
-      default: () => defaults.addFavoriteMfk()
+      default: (mfk) => defaults.addFavoriteMfk(mfk)
     },
     removeFavoriteMfk: {
       type: Function,
       required: false,
-      default: () => defaults.removeFavoriteMfk()
+      default: (mfk) => defaults.removeFavoriteMfk(mfk)
     }
   },
   data: function () {
@@ -77,12 +77,15 @@ export default {
     },
     isFavoriteMfk: function(){
       return this.selectedFavoriteMfk;
+    },
+    buttonTitle:function(){
+      return this.isFavoriteMfk ? 'Remove MFK from Favorites' : 'Add MFK to Favorites';
     }
   },
   methods: {
     loadFavoriteMfks: function(){
       Promise.resolve(this.getFavoriteMfks())
-        .then(data => this.favoriteMfks = data)
+        .then(data => this.favoriteMfks = _.cloneDeep(data)) //cloning, because we don't want to modify parent collection
         .catch(error => {
                           alert("There was a problem with loading favorite MFKs."); 
                           console.log("Favorite MFK loading problem:", error);
@@ -92,6 +95,12 @@ export default {
       if ($event.mfk ) {
         this.$emit('input', $event.mfk); //tell parent that new MFK was selected
       } 
+    },
+    toggleFavoriteMfk: function(){
+      if(this.isFavoriteMfk)
+        this.removeMfkFromFavorites();
+      else
+        this.addMfkToFavorites();
     },
     addMfkToFavorites: function () {
       if(this.isFavoriteMfk){
@@ -105,11 +114,20 @@ export default {
         return;
 
       let newFave = {mfk: this.value, alias: newAlias};
-
-      this.favoriteMfks.push(newFave); //temporarily add new fave mfk, so that interface displays is right away
+      this.favoriteMfks.push(newFave); //temporarily add new fave mfk, for fast UI update
       Promise.resolve(this.addFavoriteMfk(newFave))
         .catch((error)=> alert(`There was a problem while saving new favoreite MFK.\n${error}`))
-        .finally(()=> this.loadFavoriteMfks());;
+        .finally(()=> this.loadFavoriteMfks());
+    },
+    removeMfkFromFavorites: function(){
+      if(confirm(`Remove favorite MFK '${this.selectedFavoriteMfk.alias}' ?`))
+        {
+          let mfkToRemove = this.selectedFavoriteMfk;
+          this.favoriteMfks = _.reject(this.favoriteMfks, item => item == mfkToRemove); //temporarily remove mfk, for fast UI update
+          Promise.resolve(this.removeFavoriteMfk(mfkToRemove))
+            .catch((error)=> alert(`There was a problem while removing favoreite MFK.\n${error}`))
+            .finally(()=> this.loadFavoriteMfks());
+        }
     }
   }
 }

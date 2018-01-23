@@ -17,8 +17,8 @@ describe('MfkFavorite.vue - with explicit prop functions', function () {
       data: {
         mfk: "123-45",
         addMfk: function(newMfk){return new Promise((resolve,reject)=> window.setTimeout(()=>{mfkStore.push(newMfk); resolve()},100))},
-        getMfks: function(){return new Promise((resolve,reject)=> window.setTimeout(()=>{ resolve(_.cloneDeep(mfkStore))},100))},
-        removeMfk:function(removedMfk){return new Promise((resolve,reject)=> window.setTimeout(()=> { _.reject(mfkStore,(mfk)=> mfk == removedMfk); resolve()},100))},
+        getMfks: function(){return new Promise((resolve,reject)=> window.setTimeout(()=>{ resolve(mfkStore)},100))},
+        removeMfk:function(removedMfk){return new Promise((resolve,reject)=> window.setTimeout(()=> { mfkStore = _.reject(mfkStore,(mfk)=> mfk.alias == removedMfk.alias && mfk.mfk == removedMfk.mfk); resolve()},100))},
       }
     };
     const vm = createVM(this, `
