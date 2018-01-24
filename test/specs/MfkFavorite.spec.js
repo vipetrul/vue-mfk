@@ -16,9 +16,7 @@ describe('MfkFavorite.vue - with explicit prop functions', function () {
     let options = {
       data: {
         mfk: "123-45",
-        favoriteMfks: mfkStore,
-        addMfk: function(newMfk){return new Promise((resolve,reject)=> window.setTimeout(()=>{mfkStore.push(newMfk); resolve()},100))},
-        removeMfk:function(removedMfk){return new Promise((resolve,reject)=> window.setTimeout(()=> { mfkStore = _.reject(mfkStore,(mfk)=> mfk.alias == removedMfk.alias && mfk.mfk == removedMfk.mfk); resolve()},100))},
+        favorites: mfkStore
       },
       methods:{
         add:function(mfk){ mfkStore.push(mfk) },
@@ -34,7 +32,7 @@ describe('MfkFavorite.vue - with explicit prop functions', function () {
         <v-flex d-flex>
           <mfk-favorite 
                 v-model="mfk" 
-                :favoriteMfks="favoriteMfks"
+                :favorites="favorites"
                 @add="add"
                 @remove="remove"
                 ></mfk-favorite>

@@ -26,9 +26,10 @@
                         <v-card-text style="display:flex">
                             <mfk-favorite 
                                 v-model="mfk" 
-                                :get-favorite-mfks="getMfks" 
-                                :add-favorite-mfk="addMfk" 
-                                :remove-favorite-mfk="removeMfk"></mfk-favorite>
+                                :favorites="favorites"
+                                @add="add"
+                                @remove="remove">
+                            </mfk-favorite>
                             <mfk-input v-model='mfk'></mfk-input>
                             </v-card-text>
                         </v-card>
@@ -49,9 +50,14 @@
             el: '#app',
             data: {
                 mfk: "123-22",
-                addMfk: function (newMfk) { return new Promise((resolve, reject) => window.setTimeout(() => { mfkStore.push(newMfk); resolve() }, 100)) },
-                getMfks: function () { return new Promise((resolve, reject) => window.setTimeout(() => resolve(mfkStore), 100)) },
-                removeMfk: function (removedMfk) { return new Promise((resolve, reject) => window.setTimeout(() => { _.reject(mfkStore, (mfk) => mfk == removedMfk); resolve() }, 100)) },
+                favorites: mfkStore
+            },
+            methods:{
+                add:function(mfk){ mfkStore.push(mfk) },
+                remove:function(mfk){ 
+                let index = mfkStore.indexOf(mfk) ;
+                if(index > -1) mfkStore.splice(index,1);
+                }
             }
         });
 

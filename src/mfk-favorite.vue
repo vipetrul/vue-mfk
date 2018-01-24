@@ -34,26 +34,25 @@ import defaults from './defaults'
 
 export default {
   props: {
-    value: {
-      // mfk input
+    value: { // mfk input
       type: String,
       required: true
     },
-    favoriteMfks: {
+    favorites: {
       type: Array,
       required: true
     }
   },
   computed: {
     optionsForFavoriteMfks: function(){
-        if(this.favoriteMfks.length > 0)
-          return _.sortBy(this.favoriteMfks, [(item)=> item.alias.toLowerCase() ]);
+        if(this.favorites.length > 0)
+          return _.sortBy(this.favorites, [(item)=> item.alias.toLowerCase() ]);
         else
           return [{ header: 'You have no favorite MFKs' }];
     },
     selectedFavoriteMfk:{
       get: function () {
-        return _.find(this.favoriteMfks, item => item.mfk === this.value)
+        return _.find(this.favorites, item => item.mfk === this.value)
       }
     },
     isFavoriteMfk: function(){
