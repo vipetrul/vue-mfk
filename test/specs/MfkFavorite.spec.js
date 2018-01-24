@@ -16,9 +16,16 @@ describe('MfkFavorite.vue - with explicit prop functions', function () {
     let options = {
       data: {
         mfk: "123-45",
+        favoriteMfks: mfkStore,
         addMfk: function(newMfk){return new Promise((resolve,reject)=> window.setTimeout(()=>{mfkStore.push(newMfk); resolve()},100))},
-        getMfks: function(){return new Promise((resolve,reject)=> window.setTimeout(()=>{ resolve(mfkStore)},100))},
         removeMfk:function(removedMfk){return new Promise((resolve,reject)=> window.setTimeout(()=> { mfkStore = _.reject(mfkStore,(mfk)=> mfk.alias == removedMfk.alias && mfk.mfk == removedMfk.mfk); resolve()},100))},
+      },
+      methods:{
+        add:function(mfk){ mfkStore.push(mfk) },
+        remove:function(mfk){ 
+          let index = mfkStore.indexOf(mfk) ;
+          if(index > -1) mfkStore.splice(index,1);
+        }
       }
     };
     const vm = createVM(this, `
@@ -27,11 +34,11 @@ describe('MfkFavorite.vue - with explicit prop functions', function () {
         <v-flex d-flex>
           <mfk-favorite 
                 v-model="mfk" 
-                :getFavoriteMfks="getMfks"
-                :addFavoriteMfk="addMfk"
-                :removeFavoriteMfk="removeMfk"
+                :favoriteMfks="favoriteMfks"
+                @add="add"
+                @remove="remove"
                 ></mfk-favorite>
-            <mfk-input v-model="mfk"></mfk-input>
+          <mfk-input v-model="mfk"></mfk-input>
         </v-flex>
       </v-layout>
       <div><input v-model="mfk" style="width:400px" /></div>

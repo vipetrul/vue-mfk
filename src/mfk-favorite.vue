@@ -33,34 +33,15 @@ import _ from 'lodash'
 import defaults from './defaults'
 
 export default {
-  created: function () {
-    this.loadFavoriteMfks();
-  },
   props: {
     value: {
       // mfk input
       type: String,
       required: true
     },
-    getFavoriteMfks: {
-      type: Function,
-      required: false,
-      default: () => defaults.getFavoriteMfks()
-    },
-    addFavoriteMfk: {
-      type: Function,
-      required: false,
-      default: (mfk) => defaults.addFavoriteMfk(mfk)
-    },
-    removeFavoriteMfk: {
-      type: Function,
-      required: false,
-      default: (mfk) => defaults.removeFavoriteMfk(mfk)
-    }
-  },
-  data: function () {
-    return {
-      favoriteMfks: []
+    favoriteMfks: {
+      type: Array,
+      required: true
     }
   },
   computed: {
@@ -83,14 +64,6 @@ export default {
     }
   },
   methods: {
-    loadFavoriteMfks: function(){
-      Promise.resolve(this.getFavoriteMfks())
-        .then(data => this.favoriteMfks = _.cloneDeep(data)) //cloning, because we don't want to modify parent collection
-        .catch(error => {
-                          alert("There was a problem with loading favorite MFKs."); 
-                          console.log("Favorite MFK loading problem:", error);
-                        });
-    },
     onChange: function ($event) {
       if ($event.mfk ) {
         this.$emit('input', $event.mfk); //tell parent that new MFK was selected
@@ -103,30 +76,16 @@ export default {
         this.addMfkToFavorites();
     },
     addMfkToFavorites: function () {
-      if(this.isFavoriteMfk){
-        alert("This MFK is already one of your favorites.")
-        return;
-      }
-
       let newAlias = prompt("Please specify alias name for new favorite MFK.")
 
-      if (!newAlias)
-        return;
+      if (!newAlias) return;
 
-      let newFave = {mfk: this.value, alias: newAlias};
-      this.favoriteMfks.push(newFave); //temporarily add new fave mfk, for fast UI update
-      Promise.resolve(this.addFavoriteMfk(newFave))
-        .catch((error)=> alert(`There was a problem while saving new favoreite MFK.\n${error}`))
-        .finally(()=> this.loadFavoriteMfks());
+      this.$emit('add', {mfk: this.value, alias: newAlias});
     },
     removeMfkFromFavorites: function(){
       if(confirm(`Remove favorite MFK '${this.selectedFavoriteMfk.alias}' ?`))
         {
-          let mfkToRemove = this.selectedFavoriteMfk;
-          this.favoriteMfks = _.reject(this.favoriteMfks, item => item == mfkToRemove); //temporarily remove mfk, for fast UI update
-          Promise.resolve(this.removeFavoriteMfk(mfkToRemove))
-            .catch((error)=> alert(`There was a problem while removing favoreite MFK.\n${error}`))
-            .finally(()=> this.loadFavoriteMfks());
+          this.$emit('remove', this.selectedFavoriteMfk);
         }
     }
   }
