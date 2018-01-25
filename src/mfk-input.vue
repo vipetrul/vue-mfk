@@ -26,9 +26,6 @@ import validateMfkFunc from './Services/validateMfk';
 import _ from 'lodash';
 
 export default {
-  created(){
-    this.validateMfk = _.debounce(this.validateMfk,500);
-  },
   props:{
     value:String, //mfk input
     isValidationEnabled:{
@@ -63,7 +60,15 @@ export default {
       let mfkParts = (this.value||'').split('-');
       this.mfkDefinition.forEach(el => el.value = mfkParts[el.index] || '');
       return this.mfkDefinition; 
-    }
+    },
+    //proper way to handle debounce
+    //https://forum.vuejs.org/t/issues-with-vuejs-component-and-debounce/7224/8
+    validateMfk(){ return _.debounce(function(){ 
+      validateMfkFunc(this.mfkString)
+        .then(() => this.mfkError = null)
+        .catch(error =>this.mfkError = error);
+      },500)}
+     ,
   },
   methods: {
     onInput: function() {
@@ -72,11 +77,7 @@ export default {
     emitEvent:function(){
       this.$emit('input', this.mfkString);
     },
-    validateMfk: function(){ //this function is debouned on create()
-      validateMfkFunc(this.mfkString)
-        .then(() => this.mfkError = null)
-        .catch(error =>this.mfkError = error);
-    },
+    
     goToNextInput: function(el, $event){
       if(['Tab','Shift','ArrowLeft','ArrowRight'].includes($event.key)) return; //these keys used for form navigation, so leave them alone
       if (el.value.length == el.maxLength) this.FocusOnNextField(el.index);
