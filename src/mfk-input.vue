@@ -26,6 +26,9 @@ import validateMfkFunc from './Services/validateMfk';
 import _ from 'lodash';
 
 export default {
+  created(){
+    this.validateMfk = _.debounce(this.validateMfk,500);
+  },
   props:{
     value:String, //mfk input
     isValidationEnabled:{
@@ -69,11 +72,11 @@ export default {
     emitEvent:function(){
       this.$emit('input', this.mfkString);
     },
-    validateMfk: _.debounce(function(){
+    validateMfk: function(){ //this function is debouned on create()
       validateMfkFunc(this.mfkString)
         .then(() => this.mfkError = null)
-        .catch(error => this.mfkError = error);
-      },500),
+        .catch(error =>this.mfkError = error);
+    },
     goToNextInput: function(el, $event){
       if(['Tab','Shift','ArrowLeft','ArrowRight'].includes($event.key)) return; //these keys used for form navigation, so leave them alone
       if (el.value.length == el.maxLength) this.FocusOnNextField(el.index);
