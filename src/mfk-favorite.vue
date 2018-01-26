@@ -30,7 +30,6 @@
 
 <script>
 import _ from 'lodash'
-import defaults from './defaults'
 
 export default {
   props: {
