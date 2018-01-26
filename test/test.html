@@ -40,14 +40,17 @@
                             <v-subheader>Parent is NOT a flex container</v-subheader>
                             <v-card-text>
                                 <mfk-favorite 
-                                v-model="mfk" 
-                                :favorites="favorites"
-                                @add="add"
-                                @remove="remove">
-                            </mfk-favorite>
+                                    v-model="mfk" 
+                                    :favorites="favorites"
+                                    @add="add"
+                                    @remove="remove">
+                                </mfk-favorite>
                                 <mfk-input v-model='mfk'></mfk-input>
                             </v-card-text>
                         </v-card>
+                    </v-flex>
+                    <v-flex xs12>
+                        MFK: {{mfk}}
                     </v-flex>
                 </v-layout>
             </v-container>
