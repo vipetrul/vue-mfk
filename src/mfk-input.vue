@@ -1,5 +1,5 @@
 <template>
-    <v-layout row class="mfk-input-wrapper">
+    <v-flex d-inline-flex class="mfk-input-wrapper">
       <v-text-field
                 v-for="(el, index) in mfkElements"
                 :key="el.index"
@@ -18,7 +18,7 @@
                 :error="isMfkError"
                 :error-messages="el.index == 0 && isMfkError ? [mfkError] : []"
               ></v-text-field>
-    </v-layout>
+    </v-flex>
 </template>
 
 <script>
@@ -113,10 +113,8 @@ export default {
 };
 </script>
 <style scoped>
+.mfk-input-wrapper {}
 .mfk-input { padding-right: 0.3em; flex-basis: auto }
-
-.beforeMfk:empty {display: none}
-.beforeMfk { display: inline-block; padding-right: 0.3em; }
 
 .mfk-input-last {
   padding-right: 0em;

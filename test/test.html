@@ -20,17 +20,32 @@
     <div id="app">
         <v-app>
             <v-container fluid>
-                <v-layout>
-                    <v-flex xs8>
+                <v-layout wrap>
+                    <v-flex>
                         <v-card>
-                        <v-card-text style="display:flex">
-                            <mfk-favorite 
+                            <v-subheader>Parent is a flex container: <pre> display:flex </pre></v-subheader>
+                            <v-card-text style="display:flex">
+                                <mfk-favorite 
+                                    v-model="mfk" 
+                                    :favorites="favorites"
+                                    @add="add"
+                                    @remove="remove">
+                                </mfk-favorite>
+                                <mfk-input v-model='mfk'></mfk-input>
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
+                    <v-flex>
+                        <v-card>
+                            <v-subheader>Parent is NOT a flex container</v-subheader>
+                            <v-card-text>
+                                <mfk-favorite 
                                 v-model="mfk" 
                                 :favorites="favorites"
                                 @add="add"
                                 @remove="remove">
                             </mfk-favorite>
-                            <mfk-input v-model='mfk'></mfk-input>
+                                <mfk-input v-model='mfk'></mfk-input>
                             </v-card-text>
                         </v-card>
                     </v-flex>

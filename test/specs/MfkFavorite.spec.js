@@ -43,7 +43,7 @@ describe('MfkFavorite.vue - with explicit prop functions', function () {
         </v-flex>
         <v-flex>
           <v-card>
-            <v-card-text style="display:flex">
+            <v-card-text>
               <mfk-favorite 
                     v-model="mfk" 
                     :favorites="favorites"

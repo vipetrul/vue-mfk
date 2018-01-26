@@ -1,6 +1,6 @@
 <template>
-    <v-flex d-flex class="favorite-mfk-wrapper">
-      <v-btn flat icon small top depressed 
+    <v-flex d-inline-flex class="favorite-mfk-wrapper">
+      <v-btn flat icon small top depressed
           color="indigo" 
           :title="buttonTitle"
           @click="toggleFavoriteMfk"
@@ -102,6 +102,12 @@ export default {
 .favoriteMfks >>> label {min-width: 120%;}
 .favBtn { margin: 0; }
 
-.favorite-mfk-btn{flex: 0 0 auto}
+/* Button is causing spasing issues when not in flex parent container, need to manually adjust */
+.favorite-mfk-btn{
+  flex: 0 0 auto; 
+  margin-right:2px;
+  margin-left:2px;
+  margin-top:12px;  
+  top:8px !important}
 
 </style>
