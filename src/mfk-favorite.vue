@@ -106,7 +106,7 @@ export default {
   flex: 0 0 auto; 
   margin-right:2px;
   margin-left:2px;
-  margin-top:12px;  
+  margin-top:13px;  
   top:8px !important}
 
 </style>

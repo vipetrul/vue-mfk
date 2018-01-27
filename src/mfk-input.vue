@@ -67,7 +67,7 @@ export default {
       validateMfkFunc(this.mfkString)
         .then(() => this.mfkError = null)
         .catch(error =>this.mfkError = error);
-      },500)}
+      },1000)}
      ,
   },
   methods: {
