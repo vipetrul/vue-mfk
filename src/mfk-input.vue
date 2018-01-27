@@ -13,7 +13,7 @@
                 :class="['mfk-input', index== mfkElements.length-1 ? 'mfk-input-last':'' ]"
                 :style="{minWidth: el.minWidth + 'px', width:el.minWidth + 'px'}"
                 @input="onInput"
-                @blur= "fillWithZeros(el, $event)"
+                @keydown.native="fillWithZeros(el, $event)"
                 @keyup="goToNextInput(el, $event)"
                 :error="isMfkError"
                 :error-messages="el.index == 0 && isMfkError ? [mfkError] : []"
@@ -77,7 +77,6 @@ export default {
     emitEvent:function(){
       this.$emit('input', this.mfkString);
     },
-    
     goToNextInput: function(el, $event){
       if(['Tab','Shift','ArrowLeft','ArrowRight'].includes($event.key)) return; //these keys used for form navigation, so leave them alone
       if (el.value.length == el.maxLength) this.FocusOnNextField(el.index);
@@ -95,6 +94,8 @@ export default {
       }
     },
     fillWithZeros: function(el, $event) {
+      if(!($event.key == "Tab" && $event.shiftKey==false)) return; //only fill zeros on forward tab
+      
       if(el.value.length != el.maxLength){
         el.value = el.value === undefined ? '' : el.value.padEnd(el.maxLength, "0");
         this.emitEvent();
