@@ -28,7 +28,7 @@ import _ from 'lodash';
 export default {
   props:{
     value:String, //mfk input
-    isValidationEnabled:{
+    validate:{
       type:Boolean,
       default:true
     }
@@ -104,7 +104,7 @@ export default {
   },
   watch:{
     value:function(oldValue, newValue){
-      if(this.isValidationEnabled)
+      if(this.validate)
       {
         this.validateMfk();
       }
