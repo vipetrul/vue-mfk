@@ -1,8 +1,10 @@
+
 # VueMfk
 
 [![npm](https://img.shields.io/npm/v/vue-mfk.svg)](https://www.npmjs.com/package/vue-mfk) [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
-> A Vue.js Plugin
+> A Vue.js Plugin for MFK Input and Favorites.
+> Implemented using VuetifJS.com (Material Design)
 
 ## Installation
 
@@ -27,15 +29,36 @@ Vue.use(VueMfk)
 
 ```html
 <!-- Include after Vue -->
+<!-- VuetifyJS files -->
+<link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+<link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+<script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+<!-- Lodash -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
 <!-- Local files -->
 <link rel="stylesheet" href="vue-mfk/dist/vue-mfk.css"></link>
 <script src="vue-mfk/dist/vue-mfk.js"></script>
 
-<!-- From CDN -->
-<link rel="stylesheet" href="https://unpkg.com/vue-mfk/dist/vue-mfk.css"></link>
-<script src="https://unpkg.com/vue-mfk"></script>
+<!-- From CDN (TBD) -->
 ```
-
+## API
+### Services
+|Service| Type | Descirption |
+|--|--|--|
+| ValidateMfk | function  | `impornt {ValidateMfk} from 'vue-mfk'` <br> Call to function returns a promise. Promise gets `resolved` when MFK is valid, and gets `rejected` with error message when MFK is invalid. |
+### Components
+#### mfk-input
+| Option | Type(s) | Default | Description |
+|--|--|--|--|
+| value | String | *Required*| '-' separated MFK value
+| validate | Boolean | true | Specifies either MFK should be automatically validated on input
+| disabled | Boolean | false | Specified either entire MFK input should be disabled
+| disabledFields | Array | | Zero based array of int to specify which MFK input elements should be disabled. Example, to disable IAcct `:disabled-fields="[5]"`|
+### mfk-favorite
+| Option | Type(s) | Default | Description |
+|--|--|--|--|
+| value | String | *Required* | '-' separated MFK value
+| favorites | Array | *Required* | Array of favorite MFKs.<br>Example: `[{ alias: "My Fave MFK", mfk: "260-43-5064-40100-00000000-6026-520-20100-00-0000" }]` |
 ## Development
 
 ### Launch visual tests
