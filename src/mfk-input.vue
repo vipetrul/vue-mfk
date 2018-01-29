@@ -17,6 +17,7 @@
                 @keyup="goToNextInput(el, $event)"
                 :error="isMfkError"
                 :error-messages="el.index == 0 && isMfkError ? [mfkError] : []"
+                :disabled="el.disabled"
               ></v-text-field>
     </v-flex>
 </template>
@@ -28,9 +29,17 @@ import _ from 'lodash';
 export default {
   props:{
     value:String, //mfk input
-    validate:{
+    validate:{ //validate mfk yes/no
       type:Boolean,
       default:true
+    },
+    disabled:{
+      type:Boolean,
+      default:false
+    },
+    disabledFields:{
+      type:Array,
+      default:function(){return []},
     }
   },
   data: function(){
@@ -58,7 +67,10 @@ export default {
     },
     mfkElements : function(){
       let mfkParts = (this.value||'').split('-');
-      this.mfkDefinition.forEach(el => el.value = mfkParts[el.index] || '');
+      this.mfkDefinition.forEach((el)=>{
+        el.value = mfkParts[el.index] || '';
+        el.disabled = this.disabled || this.disabledFields.includes(el.index);
+        });
       return this.mfkDefinition; 
     },
     //proper way to handle debounce
@@ -86,7 +98,7 @@ export default {
 
       if (nextField in this.$refs) {
         if ( this.$refs[nextField][0].disabled ) //skip field if it is disabled
-          { FocusOnNextField(currentImputIndex + 1) } //try focusing on next field
+          { this.FocusOnNextField(currentImputIndex + 1) } //try focusing on next field
           else
           { 
             this.$refs[nextField][0].focus(); 
