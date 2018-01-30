@@ -5,6 +5,7 @@
           :title="buttonTitle"
           @click="toggleFavoriteMfk"
           class="favorite-mfk-btn"
+          :disabled="disabled"
           >
         <v-icon>{{isFavoriteMfk?'star':'star_border'}}</v-icon>
       </v-btn>
@@ -17,6 +18,7 @@
               class="favoriteMfks"
               dense
               @change="onChange"
+              :disabled="disabled"
             >
                 <template slot="selection" slot-scope="data">
                     {{data.item.alias}}
@@ -40,6 +42,10 @@ export default {
     favorites: {
       type: Array,
       required: true
+    },
+    disabled:{
+      type:Boolean,
+      default:false
     }
   },
   computed: {

@@ -57,8 +57,9 @@ Vue.use(VueMfk)
 ### mfk-favorite
 | Option | Type(s) | Default | Description |
 |--|--|--|--|
-| value | String | *Required* | '-' separated MFK value
+| value | String | *Required* | '-' separated MFK value |
 | favorites | Array | *Required* | Array of favorite MFKs.<br>Example: `[{ alias: "My Fave MFK", mfk: "260-43-5064-40100-00000000-6026-520-20100-00-0000" }]` |
+| disabled | Boolean | false | Specifies either field is disabled |
 ## Development
 
 ### Launch visual tests
