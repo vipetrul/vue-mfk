@@ -112,6 +112,32 @@ export default {
         el.value = el.value === undefined ? '' : el.value.padEnd(el.maxLength, "0");
         this.emitEvent();
       }
+    },
+    pasteMfk: function(el, $event){
+      //if pasting to any but first field, use default behaviour
+      if(el.index != 0)
+         return;
+
+      let pastedValue = $event.clipboardData.getData('text/plain');
+      let mfkParts = this.parseMfk(pastedValue);
+      this.mfkDefinition.forEach( el => {
+          if (!el.disabled) {
+          el.value = mfkParts[el.index] || el.value;
+          }
+      });
+      $event.preventDefault();
+      this.emitEvent();
+    },
+    parseMfk: function(mfkString){
+      let mfkWithoutDashes = mfkString.replace(/-/g,"");
+      let startPosition = 0;
+      let result = [];
+       this.mfkDefinition.forEach( el => {
+         result.push(mfkWithoutDashes.substring( startPosition, startPosition + el.maxLength));
+         startPosition = startPosition + el.maxLength;
+       });
+      
+      return result;
     }
   },
   watch:{
