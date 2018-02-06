@@ -90,7 +90,8 @@ export default {
     validateMfk(){ return _.debounce(function(){ 
       validateMfkFunc(this.mfkString)
         .then(() => this.mfkError = null)
-        .catch(error =>{ this.mfkError = error; this.$emit('update:errorMessage', error); });
+        .catch(error => this.mfkError = error )
+        .finally(() => this.$emit('update:errorMessage', this.mfkError));
       },1000)}
      ,
   },
