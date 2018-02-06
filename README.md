@@ -53,7 +53,8 @@ Vue.use(VueMfk)
 | value | String | *Required*| '-' separated MFK value
 | validate | Boolean | true | Specifies either MFK should be automatically validated on input
 | disabled | Boolean | false | Specified either entire MFK input should be disabled
-| disabledFields | Array | | Zero based array of int to specify which MFK input elements should be disabled. Example, to disable IAcct `:disabled-fields="[5]"`|
+| disabledFields | Array | false | Zero based array of int to specify which MFK input elements should be disabled. Example, to disable IAcct `:disabled-fields="[5]"`|
+| errorMessage | String | false | Display custom error message. Supports two-way binding with `.sync` modifier ( `:error-message.sync="myErrorField"` ) |
 ### mfk-favorite
 | Option | Type(s) | Default | Description |
 |--|--|--|--|

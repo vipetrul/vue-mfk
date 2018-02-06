@@ -15,8 +15,9 @@
                 @input="onInput"
                 @keydown.native="fillWithZeros(el, $event)"
                 @keyup="goToNextInput(el, $event)"
-                :error="isMfkError"
-                :error-messages="el.index == 0 && isMfkError ? [mfkError] : []"
+                @paste="pasteMfk(el,$event)"
+                :error="anyErrors"
+                :error-messages="el.index == 0 && anyErrors ? [errorToDisplay] : []"
                 :disabled="el.disabled"
               ></v-text-field>
     </v-flex>
@@ -40,6 +41,10 @@ export default {
     disabledFields:{
       type:Array,
       default:function(){return []},
+    },
+    errorMessage:{
+      type:String,
+      default:null
     }
   },
   data: function(){
@@ -59,12 +64,19 @@ export default {
       ]}
   },
   computed:{
-    isMfkError : function(){
-      return this.mfkError ? true : false;
+    anyErrors : function(){
+      return this.errorToDisplay ? true : false;
     },
     mfkString : function(){
       return this.mfkElements.map(a => a.value).join('-');
     },
+    errorToDisplay: function(){
+       if(this.errorMessage != null)
+          //if external errorMessage is set (i.e. not null) 
+          //it always takes priority over mfk validation error 
+          return this.errorMessage; 
+       else
+          return this.mfkError; }, 
     mfkElements : function(){
       let mfkParts = (this.value||'').split('-');
       this.mfkDefinition.forEach((el)=>{
@@ -78,7 +90,7 @@ export default {
     validateMfk(){ return _.debounce(function(){ 
       validateMfkFunc(this.mfkString)
         .then(() => this.mfkError = null)
-        .catch(error =>this.mfkError = error);
+        .catch(error =>{ this.mfkError = error; this.$emit('update:errorMessage', error); });
       },1000)}
      ,
   },
