@@ -1,9 +1,14 @@
 {
   "name": "vue-mfk-vuetify",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A Vue.js Plugin for MFK input.",
   "author": "Valerij Petrulevich <vipetrul@gmail.com>",
-  "keywords": [ "vue","mfk","uiowa","vuetify"  ],
+  "keywords": [
+    "vue",
+    "mfk",
+    "uiowa",
+    "vuetify"
+  ],
   "dependencies": {
     "vue": "^2.3.0",
     "vuetify": "^0.17.6",
