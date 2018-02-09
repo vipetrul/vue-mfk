@@ -6,6 +6,9 @@
 > A Vue.js Plugin for MFK Input and Favorites.
 > Implemented using VuetifJS.com (Material Design)
 
+## Demo
+https://codepen.io/vipetrul/pen/mXRjQL
+
 ## Installation
 
 ```bash
@@ -32,12 +35,12 @@ Vue.use(VueMfk)
 <!-- VuetifyJS files -->
 <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
 <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
-<script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+<script src="https://unpkg.com/vuetify/dist/vuetify.min.js"></script>
 <!-- Lodash -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
 <!-- Local files -->
-<link rel="stylesheet" href="vue-mfk/dist/vue-mfk.css"></link>
-<script src="vue-mfk/dist/vue-mfk.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/vue-mfk/dist/vue-mfk.min.css"></link>
+<script src="https://unpkg.com/vue-mfk/dist/vue-mfk.min.js"></script>
 
 <!-- From CDN (TBD) -->
 ```
