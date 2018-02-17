@@ -32,24 +32,24 @@ describe('MfkFavorite.vue - with explicit prop functions', function () {
         <v-flex>
           <v-card>
             <v-card-text style="display:flex">
-              <mfk-favorite
-                    v-model="mfk" 
-                    :favorites="favorites"
-                    @add="add"
-                    @remove="remove"></mfk-favorite>
-              <mfk-input v-model="mfk"></mfk-input>
+              <mfk-input 
+                  v-model="mfk"
+                  :favorites="favorites"
+                  @add="add"
+                  @remove="remove">
+              </mfk-input>
             </v-card-text>
           </v-card>
         </v-flex>
         <v-flex>
           <v-card>
             <v-card-text>
-              <mfk-favorite 
-                    v-model="mfk" 
-                    :favorites="favorites"
-                    @add="add"
-                    @remove="remove"></mfk-favorite>
-              <mfk-input v-model="mfk"></mfk-input>
+              <mfk-input 
+                  v-model="mfk"
+                  :favorites="favorites"
+                  @add="add"
+                  @remove="remove">
+              </mfk-input>
             </v-card-text>
           </v-card>
         </v-flex>

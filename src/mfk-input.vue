@@ -1,33 +1,48 @@
 <template>
-    <v-flex d-inline-flex class="mfk-input-wrapper">
-      <v-text-field
-                v-for="(el, index) in mfkElements"
-                :key="el.index"
-                v-model="el.value"
-                :name="el.name"
-                :ref="'mfk_field_' + el.index"
-                :label="el.name"
-                :maxlength="el.maxLength"
-                :placeholder="'0'.repeat(el.maxLength)"
-                :mask="'#'.repeat(el.maxLength)"
-                :class="['mfk-input', index== mfkElements.length-1 ? 'mfk-input-last':'' ]"
-                :style="{minWidth: el.minWidth + 'px', width:el.minWidth + 'px'}"
-                @input="onInput"
-                @keydown.native="fillWithZeros(el, $event)"
-                @keyup="goToNextInput(el, $event)"
-                @paste="pasteMfk(el,$event)"
-                :error="anyErrors"
-                :error-messages="el.index == 0 && anyErrors ? [errorToDisplay] : []"
-                :disabled="el.disabled"
-              ></v-text-field>
-    </v-flex>
+    <div class="mfk-wrapper">
+      <mfk-favorite 
+          :value="value" 
+          :favorites="favorites"
+          @favorite-mfk-selected="favoriteMfkSelected"
+          @favorite-mfk-added="favoriteMfkAdded"
+          @favorite-mfk-removed="favoriteMfkRemoved"
+          ></mfk-favorite>
+      <div class="mfk-input-wrapper">
+        <v-text-field
+            v-for="(el, index) in mfkElements"
+            :key="el.index"
+            v-model="el.value"
+            :name="el.name"
+            :ref="'mfk_field_' + el.index"
+            :label="el.name"
+            :maxlength="el.maxLength"
+            :placeholder="'0'.repeat(el.maxLength)"
+            v-themask="'#'.repeat(el.maxLength)"
+            :class="['mfk-input', index== mfkElements.length-1 ? 'mfk-input-last':'' ]"
+            :style="{minWidth: el.minWidth + 'px', width:el.minWidth + 'px'}"
+            @input="onInput"
+            @keydown.native="onKeyDown(el, $event)"
+            @keyup="goToNextInput(el, $event)"
+            @paste="pasteMfk(el,$event)"
+            :error="anyErrors"
+            :error-messages="el.index == 0 && anyErrors ? [errorToDisplay] : []"
+            :disabled="el.disabled"
+          ></v-text-field>
+      </div>
+    </div>
 </template>
 
 <script>
 import validateMfkFunc from './Services/validateMfk';
 import _ from 'lodash';
+import {mask} from 'vue-the-mask'
+
+let safeKeys = ['Tab','Shift','ArrowLeft','ArrowRight','Control','Alt','Backspace','Delete'];
 
 export default {
+  directives: {
+    themask:  mask
+  },
   props:{
     value:String, //mfk input
     validate:{ //validate mfk yes/no
@@ -45,7 +60,12 @@ export default {
     errorMessage:{
       type:String,
       default:null
-    }
+    },
+    favorites: {
+      type: Array,
+      required: false,
+      default:function(){return []}
+    },
   },
   data: function(){
     return {
@@ -92,18 +112,18 @@ export default {
         .then(() => this.mfkError = null)
         .catch(error => this.mfkError = error )
         .finally(() => this.$emit('update:errorMessage', this.mfkError));
-      },1000)}
+      },1300)}
      ,
   },
   methods: {
     onInput: function() {
-      this.emitEvent();
+      this.emitValueChanged();
     },
-    emitEvent:function(){
+    emitValueChanged:function(){
       this.$emit('input', this.mfkString);
     },
     goToNextInput: function(el, $event){
-      if(['Tab','Shift','ArrowLeft','ArrowRight'].includes($event.key)) return; //these keys used for form navigation, so leave them alone
+      if(safeKeys.includes($event.key)) return; //these keys used for form navigation, so leave them alone
       if (el.value.length == el.maxLength) this.FocusOnNextField(el.index);
     },
     FocusOnNextField: function(currentImputIndex) {
@@ -118,39 +138,51 @@ export default {
           }
       }
     },
-    fillWithZeros: function(el, $event) {
-      if(!($event.key == "Tab" && $event.shiftKey==false)) return; //only fill zeros on forward tab
-      
-      if(el.value.length != el.maxLength){
+    onKeyDown: function(el, $event){
+      if ($event.key == "Tab" && $event.shiftKey==false) { this.fillWithZeros(el); return; }
+    },
+    fillWithZeros: function(el) {
         el.value = el.value === undefined ? '' : el.value.padEnd(el.maxLength, "0");
-        this.emitEvent();
-      }
+        this.emitValueChanged();
     },
     pasteMfk: function(el, $event){
-      //if pasting to any but first field, use default behaviour
-      if(el.index != 0)
-         return;
-
       let pastedValue = $event.clipboardData.getData('text/plain');
-      let mfkParts = this.parseMfk(pastedValue);
-      this.mfkDefinition.forEach( el => {
-          if (!el.disabled) {
-          el.value = mfkParts[el.index] || el.value;
-          }
-      });
+      //if pasting to any but first field, use default behaviour
+      if(el.index != 0) return;
+
       $event.preventDefault();
-      this.emitEvent();
+      
+      let mfkParts = this.parseMfkParts(pastedValue);
+      this.applyInternalInput(mfkParts);
     },
-    parseMfk: function(mfkString){
-      let mfkWithoutDashes = mfkString.replace(/-/g,"");
+    parseMfkParts: function(mfkString){
+      let justNumbers = mfkString.replace(/\D/g,"");
       let startPosition = 0;
       let result = [];
        this.mfkDefinition.forEach( el => {
-         result.push(mfkWithoutDashes.substring( startPosition, startPosition + el.maxLength));
+         result.push(justNumbers.substring( startPosition, startPosition + el.maxLength));
          startPosition = startPosition + el.maxLength;
        });
       
       return result;
+    },
+    applyInternalInput:function(mfkParts){
+      this.mfkDefinition.forEach( el => {
+          if (!el.disabled) { //internal input should not modify disabled fields
+          el.value = mfkParts[el.index];
+          }
+      });
+      this.emitValueChanged();
+    },
+    favoriteMfkSelected: function(faveMfk){
+      let mfkParts = faveMfk.split('-');
+      this.applyInternalInput(mfkParts);
+    },
+    favoriteMfkAdded: function(faveMfk){
+      this.$emit('favorite-mfk-added', faveMfk);
+    },
+    favoriteMfkRemoved: function(faveMfk){
+      this.$emit('favorite-mfk-removed', faveMfk);
     }
   },
   watch:{
@@ -165,7 +197,8 @@ export default {
 };
 </script>
 <style scoped>
-.mfk-input-wrapper {}
+.mfk-wrapper {display:flex; white-space: nowrap}
+.mfk-input-wrapper {display:inline-flex ; flex:1 1 auto;}
 .mfk-input { padding-right: 0.3em; flex-basis: auto }
 
 .mfk-input-last {
@@ -178,4 +211,8 @@ export default {
   }
 
 .mfk-input >>> label {min-width: 120%;}
+.mfk-input >>> input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
 </style>

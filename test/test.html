@@ -8,7 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
-    <link href="../dist/vue-mfk.css" rel="stylesheet"></link>
+    <link href="../dist/vue-mfk.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0-beta.3/polyfill.js"></script>
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
@@ -22,32 +23,12 @@
             <v-container fluid>
                 <v-layout wrap>
                     <v-flex>
-                        <v-card>
-                            <v-subheader>Parent is a flex container: <pre> display:flex </pre></v-subheader>
-                            <v-card-text style="display:flex">
-                                <mfk-favorite 
-                                    v-model="mfk" 
-                                    :favorites="favorites"
-                                    @add="add"
-                                    @remove="remove">
-                                </mfk-favorite>
-                                <mfk-input v-model='mfk'></mfk-input>
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    <v-flex>
-                        <v-card>
-                            <v-subheader>Parent is NOT a flex container</v-subheader>
-                            <v-card-text>
-                                <mfk-favorite 
-                                    v-model="mfk" 
-                                    :favorites="favorites"
-                                    @add="add"
-                                    @remove="remove">
-                                </mfk-favorite>
-                                <mfk-input v-model='mfk'></mfk-input>
-                            </v-card-text>
-                        </v-card>
+                        <mfk-input
+                            v-model="mfk"
+                            :favorites="favorites"
+                            @favorite-mfk-added="add"
+                            @favorite-mfk-removed="remove">
+                        </mfk-input>
                     </v-flex>
                     <v-flex xs12>
                         MFK: {{mfk}}

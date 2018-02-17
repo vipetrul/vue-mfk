@@ -1,33 +1,33 @@
 <template>
-    <v-flex d-inline-flex class="favorite-mfk-wrapper">
-      <v-btn flat icon small top depressed
+    <div class="favorite-mfk-wrapper">
+      <v-btn flat icon small depressed
           color="indigo" 
           :title="buttonTitle"
           @click="toggleFavoriteMfk"
-          class="favorite-mfk-btn"
-          :disabled="disabled"
-          >
+          :disabled="disabled">
         <v-icon>{{isFavoriteMfk?'star':'star_border'}}</v-icon>
       </v-btn>
-      <v-select
-              ref="favoriteMfkSelector"
-              v-bind:items="optionsForFavoriteMfks"
-              :value="selectedFavoriteMfk"
-              label="Favorite MFKs"
-              placeholder="Select"
-              class="favoriteMfks"
-              dense
-              @change="onChange"
-              :disabled="disabled"
-            >
-                <template slot="selection" slot-scope="data">
-                    {{data.item.alias}}
-                </template>
-                <template slot="item" slot-scope="data">
-                    {{ data.item.alias }} 
-                </template>
-            </v-select>
-      </v-flex>
+      <div class="select-wrapper" style="display:inline-flex; width:140px">
+        <v-select
+          ref="favoriteMfkSelector"
+          v-bind:items="optionsForFavoriteMfks"
+          :value="selectedFavoriteMfk"
+          label="Favorite MFKs"
+          placeholder="Select"
+          class="favoriteMfks"
+          dense
+          @change="onChange"
+          :disabled="disabled"
+        >
+            <template slot="selection" slot-scope="data">
+                {{data.item.alias}}
+            </template>
+            <template slot="item" slot-scope="data">
+                {{ data.item.alias }} 
+            </template>
+        </v-select>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -57,11 +57,11 @@ export default {
     },
     selectedFavoriteMfk:{
       get: function () {
-        return _.find(this.favorites, item => item.mfk === this.value)
+        return _.find(this.favorites, item => item.mfk === this.value) || this.value
       }
     },
     isFavoriteMfk: function(){
-      return this.selectedFavoriteMfk;
+      return this.selectedFavoriteMfk && this.selectedFavoriteMfk.mfk || false;
     },
     buttonTitle:function(){
       return this.isFavoriteMfk ? 'Remove MFK from Favorites' : 'Add MFK to Favorites';
@@ -70,7 +70,7 @@ export default {
   methods: {
     onChange: function ($event) {
       if ($event.mfk ) {
-        this.$emit('input', $event.mfk); //tell parent that new MFK was selected
+        this.$emit('favorite-mfk-selected', $event.mfk); //tell parent that new MFK was selected
       } 
     },
     toggleFavoriteMfk: function(){
@@ -84,12 +84,12 @@ export default {
 
       if (!newAlias) return;
 
-      this.$emit('add', {mfk: this.value, alias: newAlias});
+      this.$emit('favorite-mfk-added', {mfk: this.value, alias: newAlias});
     },
     removeMfkFromFavorites: function(){
       if(confirm(`Remove favorite MFK '${this.selectedFavoriteMfk.alias}' ?`))
         {
-          this.$emit('remove', this.selectedFavoriteMfk);
+          this.$emit('favorite-mfk-removed', this.selectedFavoriteMfk);
         }
     }
   }
@@ -98,21 +98,15 @@ export default {
 
 <style scoped>
 .favorite-mfk-wrapper {
-  max-width: 170px;
-  width: 170px;
+  display: inline-block;
   margin-right: 0.3em;
   }
+.select-wrapper{
+  display:inline-flex; /* This is needed for IE 11 */
+  width:140px;
+}
 
+.favorite-mfk-wrapper >>> .btn {margin-left: 0; margin-right: 0}
 .favoriteMfks { white-space: nowrap; }
 .favoriteMfks >>> label {min-width: 120%;}
-.favBtn { margin: 0; }
-
-/* Button is causing spasing issues when not in flex parent container, need to manually adjust */
-.favorite-mfk-btn{
-  flex: 0 0 auto; 
-  margin-right:2px;
-  margin-left:2px;
-  margin-top:13px;  
-  top:8px !important}
-
 </style>
