@@ -1,8 +1,10 @@
 <template>
     <div class="mfk-wrapper">
       <mfk-favorite 
+          v-if="favorites"
           :value="value" 
           :favorites="favorites"
+          :disabled="disabled"
           @favorite-mfk-selected="favoriteMfkSelected"
           @favorite-mfk-added="favoriteMfkAdded"
           @favorite-mfk-removed="favoriteMfkRemoved"
@@ -10,23 +12,23 @@
       <div class="mfk-input-wrapper">
         <v-text-field
             v-for="(el, index) in mfkElements"
-            :key="el.index"
             v-model="el.value"
+            v-themask="'#'.repeat(el.maxLength)"
+            :key="el.index"
             :name="el.name"
             :ref="'mfk_field_' + el.index"
             :label="el.name"
             :maxlength="el.maxLength"
             :placeholder="'0'.repeat(el.maxLength)"
-            v-themask="'#'.repeat(el.maxLength)"
             :class="['mfk-input', index== mfkElements.length-1 ? 'mfk-input-last':'' ]"
             :style="{minWidth: el.minWidth + 'px', width:el.minWidth + 'px'}"
+            :error="anyErrors"
+            :error-messages="el.index == 0 && anyErrors ? [errorToDisplay] : []"
+            :disabled="el.disabled"
             @input="onInput"
             @keydown.native="onKeyDown(el, $event)"
             @keyup="goToNextInput(el, $event)"
             @paste="pasteMfk(el,$event)"
-            :error="anyErrors"
-            :error-messages="el.index == 0 && anyErrors ? [errorToDisplay] : []"
-            :disabled="el.disabled"
           ></v-text-field>
       </div>
     </div>
@@ -34,6 +36,7 @@
 
 <script>
 import validateMfkFunc from './Services/validateMfk';
+import MfkFavotire from './mfk-favorite.vue'
 import _ from 'lodash';
 import {mask} from 'vue-the-mask'
 
@@ -42,6 +45,9 @@ let safeKeys = ['Tab','Shift','ArrowLeft','ArrowRight','Control','Alt','Backspac
 export default {
   directives: {
     themask:  mask
+  },
+  components:{
+    'mfk-favorite': MfkFavotire
   },
   props:{
     value:String, //mfk input
@@ -63,8 +69,7 @@ export default {
     },
     favorites: {
       type: Array,
-      required: false,
-      default:function(){return []}
+      required: false
     },
   },
   data: function(){
@@ -113,7 +118,6 @@ export default {
         .catch(error => this.mfkError = error )
         .finally(() => this.$emit('update:errorMessage', this.mfkError));
       },1300)}
-     ,
   },
   methods: {
     onInput: function() {

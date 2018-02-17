@@ -24,10 +24,22 @@
                 <v-layout wrap>
                     <v-flex>
                         <mfk-input
+                            style="display:inline-block"
+                            v-model="mfk">
+                        </mfk-input>
+                        <mfk-input
                             v-model="mfk"
                             :favorites="favorites"
                             @favorite-mfk-added="add"
                             @favorite-mfk-removed="remove">
+                        </mfk-input>
+                        <mfk-input 
+                            v-model="mfk"
+                            :favorites="favorites"
+                            @favorite-mfk-added="add"
+                            @favorite-mfk-removed="remove"
+                            :disabledFields="[5]"
+                            >
                         </mfk-input>
                     </v-flex>
                     <v-flex xs12>

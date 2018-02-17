@@ -3,7 +3,7 @@ import plugin from '../../src/index'
 import { createVM } from '../helpers/utils.js'
 import _ from 'lodash'
 
-describe('MfkFavorite.vue - with explicit prop functions', function () {
+describe('mfk-input tests', function () {
   it('should work', function () {
     plugin(Vue);
     let mfkStore = [
@@ -31,24 +31,33 @@ describe('MfkFavorite.vue - with explicit prop functions', function () {
       <v-layout wrap>  
         <v-flex>
           <v-card>
-            <v-card-text style="display:flex">
-              <mfk-input 
-                  v-model="mfk"
-                  :favorites="favorites"
-                  @add="add"
-                  @remove="remove">
-              </mfk-input>
-            </v-card-text>
-          </v-card>
-        </v-flex>
-        <v-flex>
-          <v-card>
             <v-card-text>
+            <mfk-input
+                  style="display:inline-block" 
+                  v-model="mfk">
+              </mfk-input>
+              <mfk-input
+                  style="display:inline-block" 
+                  v-model="mfk"
+                  :favorites="favorites"
+                  @favorite-mfk-added="add"
+                  @favorite-mfk-removed="remove">
+              </mfk-input>
               <mfk-input 
                   v-model="mfk"
                   :favorites="favorites"
-                  @add="add"
-                  @remove="remove">
+                  @favorite-mfk-added="add"
+                  @favorite-mfk-removed="remove"
+                  :disabledFields="[5]"
+                  >
+              </mfk-input>
+              <mfk-input 
+                  v-model="mfk"
+                  :favorites="favorites"
+                  @favorite-mfk-added="add"
+                  @favorite-mfk-removed="remove"
+                  :disabled="true"
+                  >
               </mfk-input>
             </v-card-text>
           </v-card>
