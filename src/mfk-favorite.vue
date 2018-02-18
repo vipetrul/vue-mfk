@@ -3,22 +3,21 @@
       <v-btn flat icon small depressed
           color="indigo" 
           :title="buttonTitle"
-          @click="toggleFavoriteMfk"
-          :disabled="disabled">
+          :disabled="disabled"
+          @click="toggleFavoriteMfk">
         <v-icon>{{isFavoriteMfk?'star':'star_border'}}</v-icon>
       </v-btn>
       <div class="select-wrapper" style="display:inline-flex; width:140px">
         <v-select
           ref="favoriteMfkSelector"
           v-bind:items="optionsForFavoriteMfks"
-          :value="selectedFavoriteMfk"
+          dense
           label="Favorite MFKs"
           placeholder="Select"
           class="favoriteMfks"
-          dense
-          @change="onChange"
+          :value="selectedFavoriteMfk"
           :disabled="disabled"
-        >
+          @change="onChange">
             <template slot="selection" slot-scope="data">
                 {{data.item.alias}}
             </template>
@@ -106,7 +105,8 @@ export default {
   width:140px;
 }
 
-.favorite-mfk-wrapper >>> .btn {margin-left: 0; margin-right: 0}
+/* vertical-allign displayed differently bw chrome and firefox, had to use top + margin-top */
+.favorite-mfk-wrapper >>> .btn {margin: 0; margin-top:1.4em; vertical-align:top } 
 .favoriteMfks { white-space: nowrap; }
 .favoriteMfks >>> label {min-width: 120%;}
 </style>

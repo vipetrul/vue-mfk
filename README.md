@@ -1,4 +1,5 @@
 
+
 # VueMfk
 
 [![npm](https://img.shields.io/npm/v/vue-mfk.svg)](https://www.npmjs.com/package/vue-mfk) [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
@@ -58,12 +59,10 @@ Vue.use(VueMfk)
 | disabled | Boolean | false | Specified either entire MFK input should be disabled
 | disabledFields | Array | false | Zero based array of int to specify which MFK input elements should be disabled. Example, to disable IAcct `:disabled-fields="[5]"`|
 | errorMessage | String | *NULL* | Display custom error message. Supports two-way binding with `.sync` modifier ( `:error-message.sync="myErrorField"` )<br>Default *NULL* value will be ignored, and regular MFK validation errors will be shown if applicable. |
-### mfk-favorite
-| Option | Type(s) | Default | Description |
-|--|--|--|--|
-| value | String | *Required* | '-' separated MFK value |
-| favorites | Array | *Required* | Array of favorite MFKs.<br>Example: `[{ alias: "My Fave MFK", mfk: "260-43-5064-40100-00000000-6026-520-20100-00-0000" }]` |
-| disabled | Boolean | false | Specifies either field is disabled |
+|favorites|Array|*NULL*|Array of favorite MFKs.<br>Example: `[{ alias: "My Fave MFK", mfk: "260-43-5064-40100-00000000-6026-520-20100-00-0000" }]`<br> If value is not provided, then Favorite MFK selection will not be displayed.|
+|@favorite-mfk-added|Event||Event that raised when new favorite MFK is added.|
+| @favorite-mfk-removed|Event||Event that raised when favorite MFK is removed.|
+
 ## Development
 
 ### Launch visual tests

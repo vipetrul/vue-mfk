@@ -48,16 +48,14 @@ describe('mfk-input tests', function () {
                   :favorites="favorites"
                   @favorite-mfk-added="add"
                   @favorite-mfk-removed="remove"
-                  :disabledFields="[5]"
-                  >
+                  :disabledFields="[5]">
               </mfk-input>
               <mfk-input 
                   v-model="mfk"
                   :favorites="favorites"
                   @favorite-mfk-added="add"
                   @favorite-mfk-removed="remove"
-                  :disabled="true"
-                  >
+                  :disabled="true">
               </mfk-input>
             </v-card-text>
           </v-card>

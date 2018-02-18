@@ -219,4 +219,10 @@ export default {
   -webkit-appearance: none; 
   margin: 0; 
 }
+
+/*IE11 placeholder color*/
+.mfk-input >>> :-ms-input-placeholder {
+    color: #ccc !important;
+    font-weight: 400 !important;
+}
 </style>

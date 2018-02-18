@@ -23,11 +23,14 @@
             <v-container fluid>
                 <v-layout wrap>
                     <v-flex>
+                        <v-card>
+                            <v-card-text>
                         <mfk-input
-                            style="display:inline-block"
+                            style="display:inline-block" 
                             v-model="mfk">
-                        </mfk-input>
+                        </mfk-input><br>
                         <mfk-input
+                            style="display:inline-block" 
                             v-model="mfk"
                             :favorites="favorites"
                             @favorite-mfk-added="add"
@@ -36,11 +39,23 @@
                         <mfk-input 
                             v-model="mfk"
                             :favorites="favorites"
+                            :error-message.sync="customError"
+                            :disabled-fields="[5]"
                             @favorite-mfk-added="add"
-                            @favorite-mfk-removed="remove"
-                            :disabledFields="[5]"
-                            >
+                            @favorite-mfk-removed="remove">
                         </mfk-input>
+                        <mfk-input 
+                            v-model="mfk"
+                            :favorites="favorites"
+                            :disabled="true"
+                            :validate="false"
+                            @favorite-mfk-added="add"
+                            @favorite-mfk-removed="remove">
+                        </mfk-input>
+                        <v-text-field v-model="customError" label="Customer Error"></v-text-field>
+                        </v-card-text>
+                    </v-card>
+                                
                     </v-flex>
                     <v-flex xs12>
                         MFK: {{mfk}}
@@ -61,7 +76,8 @@
             el: '#app',
             data: {
                 mfk: "123-22",
-                favorites: mfkStore
+                favorites: mfkStore,
+                customError: "Account is not eligible for this expense"
             },
             methods:{
                 add:function(mfk){ mfkStore.push(mfk) },
